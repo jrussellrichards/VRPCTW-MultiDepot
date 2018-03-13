@@ -1,94 +1,26 @@
 
 import random
-import json
-import re 
 
-class Problem_Genetic:#clase que modela el problema: Recibe los clientes, la capacidad del vehículo y la cantidad de vehículos.
+class problem:#clase que modela el problema: Recibe los clientes, la capacidad del vehículo y la cantidad de vehículos.
 			  #Cada ruta es un cromosoma y son modelados como listas.
 			   #Cada individuo corresponde al total de clientes en una ruta, los cuales son guardados en una lista simple
 
 
-	def __init__(self, clientes,chromosome,capacidadvehiculo,cantidadvehiculo ):
+	def __init__(self, demandas,chromosome,capacidadvehiculo,cantidadvehiculo ):
 
 		self.capacidadvehiculo=capacidadvehiculo
 		self.cantidadvehiculo=cantidadvehiculo
-		self.clientes=clientes
+		self.demandas=demandas
 		self.chromosome=chromosome
 
-	
-
-	def mutation(self,chromosome):    
-	
-		start, stop = sorted(random.sample(range(len(chromosome)), 2))
-		cromo = chromosome[:start] + chromosome[stop:start-1:-1] + chromosome[stop+1:]
-		return cromo 
-
-
-# Fitness= alpha * (tu función que penaliza la distancia) + beta * (100* (numero de pasajeros/máximo número de pasajeros)).
-
-"""def fitness(individue,Problem_Genetic): #sobre la ruta total
-
-		route=generateRoute(individue,Problem_Genetic)
-		costo=0
-		subRouteDistance=0
-		routCost=0
-		weightCost=0
-		for subRoute in route:
-			lastCustomerID = 0
-			subRouteDistance = 0
-			for customerID in subRoute:
-				distance=distances[customerID][lastCustomerID]          
-				subRouteDistance=subRouteDistance+distance
-				lastCustomerID=customerID
-			routCost+=subRouteDistance
-			totalCost=routCost+weightCost
-		fitness=1/totalCost 
-		return fitness   """
-
-def fitness(individue,Problem_Genetic): #sobre la ruta total
-
-		route=generateRoute(individue,Problem_Genetic)
-		costo=0
-		subRouteDistance=0
-		routCost=0
-		capacity=0
-		spaceUsed=0
-
-		for subRoute in route:
-			lastCustomerID = 0
-			subRouteDistance = 0
-			for customerID in subRoute:
-				distance=distances[customerID][lastCustomerID]          
-				subRouteDistance=subRouteDistance+distance
-				lastCustomerID=customerID
-			routCost+=subRouteDistance
-		
-		for subRoute in route:
-			capacity+=8
-			for customerID in subRoute:
-
-				spaceUsed+=Problem_Genetic.clientes[str(customerID)]["demand"]  				
-		
-		cost=(4000-routCost)*400	
-		fitness=0.5*cost+0.5*100*(spaceUsed/capacity)
-		
-		
-			
-		return fitness 
-
-def generateRoute(individue,Problem_Genetic):
+	def cromtorut(instance,chromosome):
 		route=[]
 		subRoute = []
-		capacidadvehiculo=Problem_Genetic.capacidadvehiculo
+		capacidadvehiculo=instance.capacidadvehiculo
 		vehicleLoad=0
 		lastCustomerID=0
-
-		
-
-		for customerID in individue:			
-
-			demanda=Problem_Genetic.clientes[str(customerID)]["demand"]
-
+		for customerID in chromosome:
+			demanda=instance.clientes[customerID]
 			vehicleLoadActualizada=demanda+vehicleLoad
 			
 			if (vehicleLoadActualizada <= capacidadvehiculo):
@@ -103,25 +35,54 @@ def generateRoute(individue,Problem_Genetic):
 
 		if subRoute != []:
 			route.append(subRoute)
-		
+		print (route)
 		return route
+
+	
+
+	def mutation(self,chromosome):    
+	
+		start, stop = sorted(random.sample(range(len(chromosome)), 2))
+		cromo = chromosome[:start] + chromosome[stop:start-1:-1] + chromosome[stop+1:]
+		return cromo 
+# Fitness= alpha * (tu función que penaliza la distancia) + beta * (100* (numero de pasajeros/máximo número de pasajeros)).
+
+def fitness(route): #sobre la ruta total
+		costo=0
+		subRouteDistance=0
+		routCost=0
+		weightCost=0
+		for subRoute in route:
+			lastCustomerID = 0
+			subRouteDistance = 0
+			for customerID in subRoute:
+				distance=distances[customerID][lastCustomerID]          
+				subRouteDistance=subRouteDistance+distance
+				lastCustomerID=customerID
+			routCost+=subRouteDistance
+			totalCost=routCost+weightCost
+		fitness=1/totalCost 
+		return fitness   
+
 	
 def crossover(ind1, ind2):
-	#print("individuo 1",ind1)
-	#print("individuo 2",ind2)
+	print("individuo 1",ind1)
+	print("individuo 2",ind2)
 	size = min(len(ind1), len(ind2))
 	cxpoint1, cxpoint2 = sorted(random.sample(range(size), 2))
 	temp1 = ind1[cxpoint1:cxpoint2+1] + ind2
 	temp2 = ind1[cxpoint1:cxpoint2+1] + ind1
 	ind1 = []
 	for x in temp1:
-		if x not in ind1:			
+		if x not in ind1:
 			ind1.append(x)
 	ind2 = []
 	for x in temp2:
 		if x not in ind2:
 			ind2.append(x)
 
+	print("se transforma en",ind1)
+	print("se transforma en",ind2)
 	return ind1, ind2
 	
 
@@ -132,13 +93,40 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
 	
    
 	def initial_population(Problem_Genetic,size): #se crean los cromosomas aleatoriamente, luego se rea una poblacion inicial de cromosomas de acuerdo al tamaño elegido( size)
-		def generateIndividue():
-			individue=Problem_Genetic.chromosome
-			random.shuffle(individue)
-			return individue
+		def generateRoute():
+
+			individual=Problem_Genetic.chromosome
+			route = []
+			subRoute = []
+			capacidadvehiculo = Problem_Genetic.capacidadvehiculo
+			vehicleLoad = 0
+			lastCustomerID = 0
+			random.shuffle(individual)
+	
+
+
+
+			for customerID in individual:
+				demanda=Problem_Genetic.demandas[customerID] #demanda debe ser una tupla
+				vehicleLoadActualizada=demanda+vehicleLoad
+
+				if (vehicleLoadActualizada <= capacidadvehiculo):
+
+					subRoute.append(customerID)
+					vehicleLoad=vehicleLoadActualizada
+				else:
+					route.append(subRoute)
+					subRoute= [customerID]
+					vehicleLoad=demanda 
+
+				lastCustomerID=customerID
+			if subRoute != []:
+				route.append(subRoute)
+
+			return route
 
 		
-		return [generateIndividue() for _ in range(size)]   
+		return [generateRoute() for _ in range(size)]   
 				
 			
 			
@@ -156,8 +144,8 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
 				elements = random.sample(population,k) #se escogen los k participantes del torneo
 				padre1=elements[0]
 				padre2=elements[1]
-				fitness1=fitness(padre1,Problem_Genetic)
-				fitness2=fitness(padre2,Problem_Genetic)    
+				fitness1=fitness(padre1)
+				fitness2=fitness(padre2)    
 
 				if(fitness1>fitness2):
 					winners.append(padre1)                  
@@ -194,33 +182,11 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
 		population = new_generation_t(Problem_Genetic, k, opt, population, n_parents, n_directs, prob_mutate)
 	
 
-	#bestChromosome = opt(population, key = fitness(population,Problem_Genetic))
-
-	def theBest():
-		maxi=population[0]
-		
-		for i in population:
-
-			if(fitness(i,Problem_Genetic)> fitness(maxi,Problem_Genetic)):
-				maxi=i
-		return maxi
-
-	bestChromosome=theBest()
+	bestChromosome = opt(population, key = fitness)
+	print(bestChromosome)
 
 
-
-	#for i in population:
-	#	print("cromosoma y funcion",i,fitness(i,Problem_Genetic))
-	#print(bestChromosome)
-
-	finalRoute=generateRoute(bestChromosome,Problem_Genetic)
-	print(finalRoute)
-
-
-
-	return (bestChromosome,fitness(bestChromosome,Problem_Genetic))
-
-
+	return (bestChromosome,fitness(bestChromosome))
 
 
 
@@ -228,21 +194,20 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
 
 if __name__ == "__main__":
 
-	clientes = json.loads(open('customers.json').read())
-	problem = json.loads(open('problem.json').read())
-	distances= problem["distance_matrix"]
-	capacidadvehiculo=problem["max_vehicle_number"]
-	cantidadvehiculo=problem["vehicle_capacity"]	
-	chromosome=[]		
+	clientes = {0:2,1:4,2:7,3:5,4:2,5:8,6:1,7:2,8:3}
+	chromosome=[0,1,2,3,4,5,6,7,8]
+	w0 = [0,454,317,165,528,222,223,410,323]
+	w1 = [453,0,253,291,210,325,234,121,323]
+	w2 = [317,252,0,202,226,108,158,140,323]
+	w3 = [165,292,201,0,344,94,124,248,323]
+	w4 = [508,210,235,346,0,336,303,94,323]
+	w5 = [222,325,116,93,340,0,182,247,222]
+	w6 = [223,235,158,125,302,185,0,206,222]
+	w7 = [410,121,141,248,93,242,199,0,111]
+	w8 = [410,121,141,248,93,242,199,999,0]
+	distances = {0:w0,1:w1,2:w2,3:w3,4:w4,5:w5,6:w6,7:w7,8:w8}
 
-	for i in clientes.keys():
-		chromosome.append(int(i))
-
-	
-	
-	#distances = {0:w0,1:w1,2:w2,3:w3,4:w4,5:w5,6:w6,7:w7,8:w8}
-
-	instance=Problem_Genetic(clientes,chromosome,capacidadvehiculo,cantidadvehiculo)
+	instance=problem(clientes,chromosome,8,4)
 	
 	genetic_algorithm(instance,2,min,200,100,0.8,0.05)
 
