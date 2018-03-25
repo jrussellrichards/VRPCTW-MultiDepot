@@ -1,0 +1,144 @@
+{    
+    "1": {
+        "coordinates": {
+            "x": 45.0,
+            "y": 68.0
+        },
+        "demand": 10.0,
+        "due_time": 967.0,
+        "ready_time": 912.0,
+        "service_time": 90.0
+    },
+    "10": {
+        "coordinates": {
+            "x": 35.0,
+            "y": 66.0
+        },
+        "demand": 10.0,
+        "due_time": 410.0,
+        "ready_time": 357.0,
+        "service_time": 90.0
+    },
+    "100": {
+        "coordinates": {
+            "x": 55.0,
+            "y": 85.0
+        },
+        "demand": 20.0,
+        "due_time": 726.0,
+        "ready_time": 647.0,
+        "service_time": 90.0
+    },
+    "11": {
+        "coordinates": {
+            "x": 35.0,
+            "y": 69.0
+        },
+        "demand": 10.0,
+        "due_time": 505.0,
+        "ready_time": 448.0,
+        "service_time": 90.0
+    },
+    "12": {
+        "coordinates": {
+            "x": 25.0,
+            "y": 85.0
+        },
+        "demand": 20.0,
+        "due_time": 721.0,
+        "ready_time": 652.0,
+        "service_time": 90.0
+    },
+    "13": {
+        "coordinates": {
+            "x": 22.0,
+            "y": 75.0
+        },
+        "demand": 30.0,
+        "due_time": 92.0,
+        "ready_time": 30.0,
+        "service_time": 90.0
+    },
+    "14": {
+        "coordinates": {
+            "x": 22.0,
+            "y": 85.0
+        },
+        "demand": 10.0,
+        "due_time": 620.0,
+        "ready_time": 567.0,
+        "service_time": 90.0
+    },
+    "15": {
+        "coordinates": {
+            "x": 20.0,
+            "y": 80.0
+        },
+        "demand": 40.0,
+        "due_time": 429.0,
+        "ready_time": 384.0,
+        "service_time": 90.0
+    },
+    "16": {
+        "coordinates": {
+            "x": 20.0,
+            "y": 85.0
+        },
+        "demand": 40.0,
+        "due_time": 528.0,
+        "ready_time": 475.0,
+        "service_time": 90.0
+    },
+    "17": {
+        "coordinates": {
+            "x": 18.0,
+            "y": 75.0
+        },
+        "demand": 20.0,
+        "due_time": 148.0,
+        "ready_time": 99.0,
+        "service_time": 90.0
+    },
+    "18": {
+        "coordinates": {
+            "x": 15.0,
+            "y": 75.0
+        },
+        "demand": 20.0,
+        "due_time": 254.0,
+        "ready_time": 179.0,
+        "service_time": 90.0
+    },
+    "19": {
+        "coordinates": {
+            "x": 15.0,
+            "y": 80.0
+        },
+        "demand": 10.0,
+        "due_time": 345.0,
+        "ready_time": 278.0,
+        "service_time": 90.0
+    },
+    "2": {
+        "coordinates": {
+            "x": 45.0,
+            "y": 70.0
+        },
+        "demand": 30.0,
+        "due_time": 870.0,
+        "ready_time": 825.0,
+        "service_time": 90.0
+    },
+    "20": {
+        "coordinates": {
+            "x": 30.0,
+            "y": 50.0
+        },
+        "demand": 10.0,
+        "due_time": 73.0,
+        "ready_time": 10.0,
+        "service_time": 90.0
+    }
+    
+    
+}
