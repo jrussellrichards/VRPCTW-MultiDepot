@@ -38,10 +38,9 @@ finalSolution=[]
 
 def get_minimum(k, a):
     print("----------------------------------------------------------------------")
-    print("valor de g",g)
+
     if (k, a) in g:
-        print(k,a,"estan en g=",g)
-        print("retornar g[k, a]=",g[k, a])
+
         
         # Already calculated Set g[%d, (%s)]=%d' % (k, str(a), g[k, a]))
         return g[k, a]
@@ -50,31 +49,34 @@ def get_minimum(k, a):
     values = []
     all_min = []
     for j in a:
-        print("entrando con k",k," y j",j)
-        print("para ",j,"en ",a)
+      #  print("entrando con k",k," y j",j)
+       # print("para ",j,"en ",a)
         set_a = copy.deepcopy(list(a))  
-        print("set a =",set_a)      
+        #print("set a =",set_a)      
         set_a.remove(j)
-        print("remuevo ",j,"de set_a")
+        #print("remuevo ",j,"de set_a")
         all_min.append([j, tuple(set_a)])
-        print("agrego a all_min el valor", j, "y el set a como tupla")
-        print("por lo tanto el valor all_min queda como",all_min)
-        print("hacemos recursión en la función y la igualamos al resultado ",j,tuple(set_a))
+   #     print("agrego a all_min el valor", j, "y el set a como tupla")
+    #    print("por lo tanto el valor all_min queda como",all_min)
+     #   print("hacemos recursión en la función y la igualamos al resultado ",j,tuple(set_a))
         result = get_minimum(j, tuple(set_a))
-        print("para ver cuando se llega acá",result)
+      #  print("para ver cuando se llega acá",result)
         values.append(matrix[k-1][j-1] + result)
-        print(" hasta acá k y j valen",k,j,"y all_min",all_min)
-        print("se agrega a values la matriz [k-1][j-1] + result cuyo valores son matriz:",matrix[k-1][j-1] ,result)
-        print("por lo tanto values queda con",values)
+       # print(" hasta acá k y j valen",k,j,"y all_min",all_min)
+   #     print("se agrega a values la matriz [k-1][j-1] + result cuyo valores son matriz:",matrix[k-1][j-1] ,result)
+    #    print("por lo tanto values queda con",values)
 
     # get minimun value from set as optimal solution for
-    print("g=",g,"a=",a)
-    print("salimos del for e igualamos  g[k, a]  al valor minimo de values que es",min(values))
+   # print("g=",g,"a=",a)
+   # print("salimos del for e igualamos  g[k, a]  al valor minimo de values que es",min(values))
+    print("k,a",k,a)
+    print("g vale",g)
     g[k, a] = min(values)
 
-    print("agregamos a p ((k, a), all_min[values.index(g[k, a])])")
+   # print("agregamos a p ((k, a), all_min[values.index(g[k, a])])")
+   # print("blabla",((k, a), all_min[values.index(g[k, a])]))
     p.append(((k, a), all_min[values.index(g[k, a])]))
-    print("p es igual",p)
+   # print("p es igual",p)
 
     return g[k, a]
 
@@ -84,13 +86,14 @@ if __name__ == '__main__':
     for x in range(1, n):
         g[x + 1, ()] = matrix[x][0]     
         
-
+    print(g)    
     get_minimum(1, (2,3,4))
 
     print('\n\nSolution to TSP: {1, ', end='')
     solution = p.pop()
     print(solution[1][0], end=', ')
     finalSolution.append(solution[1][0])
+
     for x in range(n - 2):
         for new_solution in p:
             if tuple(solution[1]) == new_solution[0]:
