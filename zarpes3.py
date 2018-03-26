@@ -21,9 +21,10 @@ p = []
 minDistance=999
 
 def tsp(vehicle):
-    
+    print(vehicle)
     for x in vehicle:
-                  
+
+        print(x)         
         g[x , ()] = matrix[clientes[x]-1][0]
 
     VehicleClients=tuple(vehicle)    
@@ -47,8 +48,10 @@ def tsp(vehicle):
 
 
 def get_minimum(k, a):
-     
+    print("k,a",k,a)
+    print(g) 
     if (k, a) in g:
+
         # Already calculated Set g[%d, (%s)]=%d' % (k, str(a), g[k, a]))
         return g[k, a]
 
@@ -56,8 +59,8 @@ def get_minimum(k, a):
     all_min = []
    
     for j in a:
+   
         comuna=clientes[j]
-
         set_a = copy.deepcopy(list(a))  
     
         set_a.remove(j)
@@ -65,13 +68,12 @@ def get_minimum(k, a):
         all_min.append([j, tuple(set_a)])
 
         result = get_minimum(j, tuple(set_a))
-
-        values.append(matrix[k-1][j-1] + result)
+        print("k,j",k,j)
+        values.append(matrix[k-1][clientes[j]-1] + result)
 
 
     # get minimun value from set as optimal solution for
-    print("k,a",k,a)
-    print("g vale",g)
+
     
     g[k, a] = min(values)
    
@@ -86,7 +88,8 @@ if __name__ == '__main__':
   # clientes=(2,3,4)
     clientes={}
     continuar=1
-    vehicles=[[2,3,4],[],[],[],[]]
+    vehicles=[[],[],[],[],[]]
+    isFull=0
     
     print("agregue cliente")
     while(continuar==1):
@@ -94,16 +97,28 @@ if __name__ == '__main__':
         idd = int(input())
         destino= int(input())
         clientes[idd]=destino
-        idd = int(input())
-        destino= int(input())
-        clientes[idd]=destino
-        idd = int(input())
-        destino= int(input())
-        clientes[idd]=destino
 
-            
-        i=vehicles[0]    
-        distance1=tsp(tuple(i))
+        
+        
+
+        for i in vehicles:
+            if(i==[]):
+                i.append(idd)
+                isFull=0
+                break
+            else:
+                isFull=1    
+
+        if(isFull==1): 
+            for i in vehicles:
+
+                ruta=tsp(tuple(i))       
+
+        
+
+        print(vehicles)    
+        #i=vehicles[0]    
+        #distance1=tsp(tuple(i))
             #print("distancia",distance1)
         print("agregar otro?")
         continuar=int(input())
