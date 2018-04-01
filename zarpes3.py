@@ -6,9 +6,9 @@ import os
 
 matrix = [
 	[0, 2, 9, 10],
-	[1, 0, 6, 4],
-	[15, 7, 0, 8],
-	[6, 3, 12, 0]
+	[0, 0, 6, 4],
+	[0, 7, 0, 8],
+	[0, 3, 12, 0]
 ]
 
 #datos para tsp
@@ -18,7 +18,7 @@ matrix = [
 g = {} # guarda la distancia mínima entre rutas ej: (1,(2,3,4)):3 , el valor mínimo desde ir de 1 y pasar por 2 3 y 4
 p = []#guarda las rutas óptimas
 #datos para ruteo
-minDistance=999
+
 
 def tsp(vehicle): #el algoritmo tsp recibe una ruta en forma de tupla
 #   print("calculando para el vehiculo",vehicle)
@@ -32,28 +32,30 @@ def tsp(vehicle): #el algoritmo tsp recibe una ruta en forma de tupla
 	VehicleClients=tuple(vehicle)    
 	#claves=tuple(clientes.keys()) 
 		 
-	get_minimum(1, VehicleClients)
+	distance=get_minimum(1, VehicleClients)
+
 	
 		
-	print('\n\nSolution to TSP: {1, ', end='')
+	#print('\n\nSolution to TSP: {1, ', end='')
 	solution = p.pop()
+	
+	
 	finalSolution.append(1)
-	print(solution[1][0], end=', ')
+	#print(solution[1][0], end=', ')
 	finalSolution.append(solution[1][0])
 
 	for x in range(len(vehicle) - 1):
-		for new_solution in p:
+		for new_solution in 	p:
 			if tuple(solution[1]) == new_solution[0]:
 				solution = new_solution
-				print(solution[1][0], end=', ')
+				#print(solution[1][0], end=', ')
 				finalSolution.append(solution[1][0])
 				break
-	finalSolution.append(1)
+	#finalSolution.append(1)
 		   
-	print('1}')
-	print("---------------------------------------------------------------------------------------------------------------------------------------------------")
+	#print('1}')
 	
-	return finalSolution
+	return finalSolution,distance
 
 
 def get_minimum(k, a): #calcula camino mínimo entre el nodo k y el set de nodos a
@@ -111,15 +113,21 @@ def get_minimum(k, a): #calcula camino mínimo entre el nodo k y el set de nodos
 	return g[k, a]
 
 
+
+		
+
+
+
 if __name__ == '__main__':
 
 	# clientes=(2,3,4)
 	
 	clientes={1:1}
 	continuar=1
-	vehicles=[[]]
+	vehicles=[[],[],[]]
 	isFull=0
-	
+	distanceMin=0
+	aux=0
 	print("agregue cliente")
 	while(continuar==1):
 		
@@ -127,38 +135,77 @@ if __name__ == '__main__':
 		idd = int(input())
 		destino= int(input())
 		clientes[idd]=destino
-
+		
 		
 
-		for i in vehicles:
+		for pos,i in enumerate(vehicles):
 
 			if(i==[]):
 				i.append(idd)
+				print("agregado el cliente",idd, "al vehículo",pos+1)
+				#print(vehicles)
 				isFull=0
 				break
 			else:
 				isFull=1    
 
 		if(isFull==1): 
-			for i in vehicles:
-				
-				
-				ruta=tsp(tuple(i))
-				
-				i.append(idd)
+			for i,v in enumerate(vehicles):
+			#	print("entrando con i y v",i,v)
+				v.append(idd)
+			#	print("añado",idd)
+				ruta=tsp(tuple(v))
+				distance=ruta[1]
+			#	print("la ruta es",ruta[0])
+			#	print("distancia y distancia minima",distance,distanceMin)
+				if(i==0):
+			#		print("como es la primera distancia")
+					distanceMin=distance
+					aux=i
+
+					
+				elif(distance<distanceMin):
+			#		print("distance menor distance min",distance,distanceMin)
+			#		print("elimino de",vehicles[aux],"el valor",idd)
+					vehicles[aux].remove(idd)
+			#		print("vehicle[aux queda",vehicle[aux] )
+					aux=i		
+
+				elif(distance>=distanceMin):
+			#		print("como distancia min es mayor que distancia elimino de ",v,idd)
+					v.remove(idd)	
+			#		print("quedando",v)
+			#		print("vehicle i",vehicles[i])
+
 
 				g = {}
 				p = [] 
 
-				
+			print("se agrego el cliente",idd,"al vehículo",aux+1)	
 			
 		#i=vehicles[0]    
 		#distance1=tsp(tuple(i))
 			#print("distancia",distance1)
+	#	print(vehicles)	
+
 		print("agregar otro?")
 		continuar=int(input())
 
-		
+
+	#print(vehicles)
+
+	for i,v in enumerate(vehicles):
+
+	#	print("haciendo tsp a",v)
+
+		ruta=tsp(tuple(v))
+		vehicles[i] =ruta[0]
+		vehicles[i].remove(1)
+	#	print("la ruta queda",vehicles[i])
+
+
+
+	print("la ruta óptima para tus vehículos es",vehicles)	
 	
 	
 	
