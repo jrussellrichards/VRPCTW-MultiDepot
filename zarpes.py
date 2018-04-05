@@ -11,6 +11,12 @@ matrix = [
 	[0, 3, 12, 0]
 ]
 
+matrixComuna = [
+	[0, 1, 1, 0],
+	[0, 0, 1, 1],
+	[0, 1, 0, 1],
+	[0, 1, 1, 0]
+]
 #datos para tsp
 
 
@@ -113,6 +119,44 @@ def get_minimum(k, a): #calcula camino mínimo entre el nodo k y el set de nodos
 	return g[k, a]
 
 
+def llenar(vehicles):
+
+			global g
+			global p 
+			for i,v in enumerate(vehicles):
+
+
+			#	print("entrando con i y v",i,v)
+				v.append(idd)
+			#	print("añado",idd)
+				ruta=tsp(tuple(v))
+				distance=ruta[1]
+			#	print("la ruta es",ruta[0])
+			#	print("distancia y distancia minima",distance,distanceMin)
+				if(i==0):
+			#		print("como es la primera distancia")
+					distanceMin=distance
+					aux=i
+
+					
+				elif(distance<distanceMin):
+			#		print("distance menor distance min",distance,distanceMin)
+			#		print("elimino de",vehicles[aux],"el valor",idd)
+					vehicles[aux].remove(idd)
+			#		print("vehicle[aux queda",vehicle[aux] )
+					aux=i		
+
+				elif(distance>=distanceMin):
+			#		print("como distancia min es mayor que distancia elimino de ",v,idd)
+					v.remove(idd)	
+			#		print("quedando",v)
+			#		print("vehicle i",vehicles[i])
+
+
+				g = {}
+				p = [] 
+
+			print("se agrego el cliente",idd,"al vehículo",aux+1)
 
 		
 
@@ -150,44 +194,10 @@ if __name__ == '__main__':
 				isFull=1    
 
 		if(isFull==1): 
-			for i,v in enumerate(vehicles):
-			#	print("entrando con i y v",i,v)
-				v.append(idd)
-			#	print("añado",idd)
-				ruta=tsp(tuple(v))
-				distance=ruta[1]
-			#	print("la ruta es",ruta[0])
-			#	print("distancia y distancia minima",distance,distanceMin)
-				if(i==0):
-			#		print("como es la primera distancia")
-					distanceMin=distance
-					aux=i
+			llenar(vehicles)
+	
+				
 
-					
-				elif(distance<distanceMin):
-			#		print("distance menor distance min",distance,distanceMin)
-			#		print("elimino de",vehicles[aux],"el valor",idd)
-					vehicles[aux].remove(idd)
-					print("remove",idd)
-			#		print("vehicle[aux queda",vehicle[aux] )
-					aux=i		
-
-				elif(distance>=distanceMin):
-			#		print("como distancia min es mayor que distancia elimino de ",v,idd)
-					v.remove(idd)	
-			#		print("quedando",v)
-			#		print("vehicle i",vehicles[i])
-
-
-				g = {}
-				p = [] 
-
-			print("se agrego el cliente",idd,"al vehículo",aux+1)	
-			
-		#i=vehicles[0]    
-		#distance1=tsp(tuple(i))
-			#print("distancia",distance1)
-	#	print(vehicles)	
 
 		print("agregar otro?")
 		continuar=int(input())
