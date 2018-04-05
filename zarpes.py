@@ -168,7 +168,7 @@ if __name__ == '__main__':
 	
 	clientes={1:1}
 	continuar=1
-	vehicles=[[],[],[]]
+	vehicles=[[],[],[],[],[]]
 	isFull=0
 	distanceMin=0
 	aux=0
@@ -208,10 +208,10 @@ if __name__ == '__main__':
 	for i,v in enumerate(vehicles):
 
 	#	print("haciendo tsp a",v)
-
-		ruta=tsp(tuple(v))
-		vehicles[i] =ruta[0]
-		vehicles[i].remove(1)
+		if(v!=[]):
+			ruta=tsp(tuple(v))
+			vehicles[i] =ruta[0]
+			vehicles[i].remove(1)
 	#	print("la ruta queda",vehicles[i])
 
 
