@@ -12,10 +12,10 @@ matrix = [
 ]
 
 matrixComuna = [
-	[0, 1, 1, 0],
-	[0, 0, 1, 1],
-	[0, 1, 0, 1],
-	[0, 1, 1, 0]
+	[1, 1, 0, 0],
+	[1, 1, 1, 1],
+	[1, 0, 1, 0],
+	[1, 1, 0, 1]
 ]
 #datos para tsp
 
@@ -24,7 +24,7 @@ matrixComuna = [
 g = {} # guarda la distancia mínima entre rutas ej: (1,(2,3,4)):3 , el valor mínimo desde ir de 1 y pasar por 2 3 y 4
 p = []#guarda las rutas óptimas
 #datos para ruteo
-
+vehicles=[[]]
 
 def tsp(vehicle): #el algoritmo tsp recibe una ruta en forma de tupla
 #   print("calculando para el vehiculo",vehicle)
@@ -119,7 +119,77 @@ def get_minimum(k, a): #calcula camino mínimo entre el nodo k y el set de nodos
 	return g[k, a]
 
 
-def llenar(vehicles):
+def llenar():#agrega el cliente al vehículo que de la menor distancia
+
+			global g
+			global p
+			global vehicles
+			compatible= True 
+
+
+			for i,v in enumerate(vehicles):
+
+
+			#	print("entrando con i y v",i,v)
+
+
+				v.append(idd)
+			#	print("añado",idd)
+				ruta=tsp(tuple(v))
+				distance=ruta[1]
+			#	print("la ruta es",ruta[0])
+			#	print("distancia y distancia minima",distance,distanceMin)
+				if(i==0):
+			#		print("como es la primera distancia")
+					distanceMin=distance
+					aux=i
+
+					
+				elif(distance<distanceMin):
+			#		print("distance menor distance min",distance,distanceMin)
+			#		print("elimino de",vehicles[aux],"el valor",idd)
+					vehicles[aux].remove(idd)
+			#		print("vehicle[aux queda",vehicle[aux] )
+					aux=i		
+
+				elif(distance>=distanceMin):
+			#		print("como distancia min es mayor que distancia elimino de ",v,idd)
+					v.remove(idd)	
+			#		print("quedando",v)
+			#		print("vehicle i",vehicles[i])
+
+
+				g = {}
+				p = [] 
+
+#desde acá verifico que cumplan la condición de la matriz, si no lo hace entonces se crea un nuevo vehículo mientras este sea menor a 5 y lo asigno ahí"""
+			
+			rutaAux=tsp(tuple(vehicles[aux]))[0]
+			g = {}
+			p = [] 
+
+			ultimo=rutaAux[-1]
+			penultimo=rutaAux[-2]
+
+
+			if(matrixComuna[clientes[penultimo]-1][clientes[ultimo]-1]!=1 and len(vehicles)<5 ):
+
+				vehicles.append([])
+				vehicles[-1].append(idd)
+				vehicles[aux].remove(idd)
+
+				print("se agrego el cliente",idd,"al vehiculo",len(vehicles))
+
+
+
+
+			else:
+				
+
+				print("se agrego el cliente",idd,"al vehículo",aux+1)
+
+"""
+def llenarRespaldo(vehicles):
 
 			global g
 			global p 
@@ -158,7 +228,7 @@ def llenar(vehicles):
 
 			print("se agrego el cliente",idd,"al vehículo",aux+1)
 
-		
+	"""	
 
 
 
@@ -168,7 +238,7 @@ if __name__ == '__main__':
 	
 	clientes={1:1}
 	continuar=1
-	vehicles=[[],[],[],[],[]]
+	
 	isFull=0
 	distanceMin=0
 	aux=0
@@ -194,9 +264,14 @@ if __name__ == '__main__':
 				isFull=1    
 
 		if(isFull==1): 
-			llenar(vehicles)
-	
+			llenar()
+
 				
+		
+
+
+
+
 
 
 		print("agregar otro?")
@@ -209,8 +284,12 @@ if __name__ == '__main__':
 
 	#	print("haciendo tsp a",v)
 		if(v!=[]):
+
 			ruta=tsp(tuple(v))
+			g = {}
+			p = [] 
 			vehicles[i] =ruta[0]
+
 			vehicles[i].remove(1)
 	#	print("la ruta queda",vehicles[i])
 

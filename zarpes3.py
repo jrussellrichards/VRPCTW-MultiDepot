@@ -197,12 +197,15 @@ if __name__ == '__main__':
 
 	for i,v in enumerate(vehicles):
 
-	#	print("haciendo tsp a",v)
+		if(v!=[]):
 
-		ruta=tsp(tuple(v))
-		vehicles[i] =ruta[0]
-		vehicles[i].remove(1)
-	#	print("la ruta queda",vehicles[i])
+		#	print("haciendo tsp a",v)
+			
+			ruta=tsp(tuple(v))
+			vehicles[i] =ruta[0]
+			
+			vehicles[i].remove(1)
+		#	print("la ruta queda",vehicles[i])
 
 
 
