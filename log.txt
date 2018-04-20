@@ -1,0 +1,35 @@
+La matriz de distancia es:
+[0, 2, 9, 10]
+[0, 0, 6, 4]
+[0, 7, 0, 8]
+[0, 3, 12, 0]
+Por otro lado la matriz de adyacencia es:
+[1, 1, 0, 0]
+[1, 1, 1, 1]
+[1, 0, 1, 0]
+[1, 1, 0, 1]
+
+Nuevo cliente, su id es: 2 y el destino:2
+
+Nuevo cliente, su id es: 3 y el destino:3
+agregando el cliente al vehiculo[2, 3]la mejor ruta es: [1, 2, 3]obtenemos una distancia de: 8
+se agrego el cliente al vehiculo [2, 3]ya que es la distancia más corta
+
+Nuevo cliente, su id es: 4 y el destino:4
+agregando el cliente al vehiculo[2, 3, 4]la mejor ruta es: [1, 2, 3, 4]obtenemos una distancia de: 16
+se agrego el cliente al vehiculo [2, 3, 4]ya que es la distancia más corta
+como la mejor ruta no es compatible con la matriz de adyacencia debemos asignar otro automovilpor lo que los moviles quedan:[[2, 3], [4]]
+
+Nuevo cliente, su id es: 5 y el destino:2
+agregando el cliente al vehiculo[2, 3, 5]la mejor ruta es: [1, 2, 5, 3]obtenemos una distancia de: 8
+agregando el cliente al vehiculo[4, 5]la mejor ruta es: [1, 5, 4]obtenemos una distancia de: 6
+se agrego el cliente al vehiculo [4, 5]ya que es la distancia más corta
+
+Nuevo cliente, su id es: 6 y el destino:3
+agregando el cliente al vehiculo[2, 3, 6]la mejor ruta es: [1, 2, 3, 6]obtenemos una distancia de: 8
+agregando el cliente al vehiculo[4, 5, 6]la mejor ruta es: [1, 5, 6, 4]obtenemos una distancia de: 16
+se agrego el cliente al vehiculo [2, 3, 6]ya que es la distancia más corta
+
+Nuevo cliente, su id es: 7 y el destino:4
+agregando el cliente al vehiculo[4, 5, 7]la mejor ruta es: [1, 5, 4, 7]obtenemos una distancia de: 6
+se agrego el cliente al vehiculo [4, 5, 7]ya que es la distancia más corta

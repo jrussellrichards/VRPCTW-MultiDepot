@@ -3,7 +3,7 @@ import copy
 import os
 
 
-#Matriz de distancia
+
 matrix = [
 	[0, 2, 9, 10],
 	[0, 0, 6, 4],
@@ -11,7 +11,6 @@ matrix = [
 	[0, 3, 12, 0]
 ]
 
-#Matriz de adyacencia 
 matrixComuna = [
 	[1, 1, 0, 0],
 	[1, 1, 1, 1],
@@ -19,14 +18,6 @@ matrixComuna = [
 	[1, 1, 0, 1]
 ]
 
-
-archivo_log = open("log.txt", "w")
-archivo_log.write("La matriz de distancia es:"+'\n')
-for fila in matrix:
-  archivo_log.write("%s\n" % fila)
-archivo_log.write("Por otro lado la matriz de adyacencia es:"+'\n')
-for fila in matrixComuna:
-  archivo_log.write("%s\n" % fila)
 
 
 
@@ -128,38 +119,41 @@ def llenar(idd):#agrega el cliente al vehículo que de la menor distancia
 			global g
 			global p
 			global vehicles	
-			aux=0	
+			not_min=True		
 
 			print("vehicles",vehicles)
 			for i,v in enumerate(vehicles):# Para cada vehículo agrega el cliente y calcula el tsp para ese vehículo. El vehículo que da la distancia mínima, es al que se agrega el cliente.
 				
-				v.append(idd)
-				ruta=tsp(tuple(v))
-				distance=ruta[1]
-				archivo_log.write("agregando el cliente al vehiculo"+str(v)+"la mejor ruta es: "+str(ruta[0])+"obtenemos una distancia de: "+str(distance)+'\n')
+				print("valor i,,id,v",i,idd,v)
+				if(len(v)==3):
+					print("el vehiculo ",i,"se ha completado, un nuevo vehículo ocupará su lugar")
+					print("el recorrido es ",v)
+					vehicles.remove(v)
 
-				if(i==0):
-					
-					distanceMin=distance
-					aux=i
-					
+
+				else: 	
+
+					v.append(idd)
+					ruta=tsp(tuple(v))
+					distance=ruta[1]
+
+					if(not_min):
+						distanceMin=distance
+						aux=i
 						
-				elif(distance<distanceMin):
-					print("primer elif")
-					vehicles[aux].remove(idd)
-					aux=i		
+					elif(distance<distanceMin):
+						vehicles[aux].remove(idd)
+						aux=i		
 
-				elif(distance>=distanceMin):
-					print("segundo elif")
-					v.remove(idd)
+					elif(distance>=distanceMin):
+						v.remove(idd)
 
 
-				g = {}
-				p = [] 
+					g = {}
+					p = [] 
 
 #desde acá verifico que cumplan la condición de la matriz, si no lo hace entonces se crea un nuevo vehículo mientras este sea menor a 5 y lo asigno ahí"""
-			#print("aux=",aux)
-			archivo_log.write("se agrego el cliente al vehiculo "+str(vehicles[aux])+"ya que es la distancia más corta"+'\n')
+			
 			rutaAux=tsp(tuple(vehicles[aux]))[0]
 			g = {}
 			p = [] 
@@ -175,21 +169,16 @@ def llenar(idd):#agrega el cliente al vehículo que de la menor distancia
 				vehicles[aux].remove(idd)
 
 				print("se agrego el cliente",idd,"al vehiculo",len(vehicles))
-				archivo_log.write("como la mejor ruta no es compatible con la matriz de adyacencia debemos asignar otro automovil "+"por lo que los moviles quedan:"+str(vehicles)+'\n')
 
 
 
 
 			else:
 				
+
 				print("se agrego el cliente",idd,"al vehículo",aux+1)
 
-			if(len(vehicles[aux])==3):
-				print("el vehiculo",aux+1,"se llenó")
-				vehicles.pop(aux)
-				print("quedan",vehicles)	
-			if(vehicles==[]):
-				vehicles.append([])
+
 
 
 
@@ -210,7 +199,6 @@ if __name__ == '__main__':
 		idd = int(input())
 		destino= int(input())
 		clientes[idd]=destino
-		archivo_log.write('\n'+"Nuevo cliente, su id es: "+str(idd)+" y el destino:"+str(destino)+'\n')
 		
 		
 
@@ -248,6 +236,7 @@ if __name__ == '__main__':
 
 
 	print("la ruta óptima para tus vehículos es",vehicles)	
+	
 	
 	
 	

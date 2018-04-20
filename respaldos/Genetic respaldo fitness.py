@@ -18,6 +18,7 @@ class Problem_Genetic:#clase que modela el problema: Recibe los clientes, la cap
 		self.chromosome=chromosome
 
 	
+
 	def mutation(self,chromosome):    
 	
 		start, stop = sorted(random.sample(range(len(chromosome)), 2))
@@ -27,29 +28,54 @@ class Problem_Genetic:#clase que modela el problema: Recibe los clientes, la cap
 
 
 
-def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para cada ruta
+def fitness(individue,Problem_Genetic): #sobre la ruta total
 
 		route=generateRoute(individue,Problem_Genetic)
+		#print("individuo",individue)
+		costo=0
 		subRouteDistance=0
 		routDistance=0
 		capacity=0
-		vehicle_use=0
+		spaceUsed=0
+		vehicleUse=0
+		global distanceMax
+		global distanceMin
+		global vehicleMax
+		global vehicleMin
+		global count
 		
-	
 		
 		for subRoute in route:
-			vehicle_use+=1
-			lastCustomerID = 0
+			vehicleUse+=1
+			lastCustomerID = 0 # para tener la penalización desde el origen. Si tengo [4,5,6] calcula la distancia entre el origen y 4, entre 4 y 5 y entre 5 y 6
 			subRouteDistance = 0
 			for customerID in subRoute:
 				distance=distances[customerID][lastCustomerID]          
 				subRouteDistance=subRouteDistance+distance
 				lastCustomerID=customerID
 			routDistance+=subRouteDistance
-	#
+	#	print("distancia ruta",routDistance,"distancia maxima",distanceMax,"distancia minima",distanceMin)
+		if(routDistance<distanceMin):
+		#	print("como distancia de ruta es menor a la minima ruta minima igual a distancia de ruta")
+			distanceMin=routDistance
+		#	print("distancia ruta",routDistance,"distancia maxima",distanceMax,"distancia minima",distanceMin)
+		elif(routDistance>distanceMax):
+		#	print("como la ruta era mayor a la maxima pero no menor a la minima, distancia maxima igual a distancia ruta")
+			distanceMax=routDistance
+		#	print("distancia ruta",routDistance,"distancia maxima",distanceMax,"distancia minima",distanceMin)
+		if(vehicleUse>vehicleMax):
+			vehicleMax=vehicleUse
+
+		elif(vehicleUse<vehicleMin):
+			vehicleMin=vehicleUse
+		#print("distancia ruta",routDistance)
 			
-		fitness=routDistance*vehicle_use*vehicle_use
-			
+		Fdistance=(distanceMax-routDistance)/(distanceMax-distanceMin)
+		if(vehicleMax==vehicleMin):
+			Fvehicle=0
+		else:
+			Fvehicle=(vehicleMax-vehicleUse)/(vehicleMax-vehicleMin)
+		fitness= (Fdistance+Fvehicle)/2		
 					
 		return fitness 
 
@@ -232,7 +258,7 @@ if __name__ == "__main__":
 
 	instance=Problem_Genetic(clientes,chromosome,capacidadvehiculo,cantidadvehiculo)
 	
-	genetic_algorithm(instance,2,min,400,100,0.8,0.05)
+	genetic_algorithm(instance,2,min,1000,100,0.8,0.05)
 
 	tiempo_final = time() 
 	print("tiempo de ejecución",tiempo_final-tiempo_inicial)
