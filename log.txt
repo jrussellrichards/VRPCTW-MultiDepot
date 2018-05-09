@@ -10,26 +10,34 @@ Por otro lado la matriz de adyacencia es:
 [1, 1, 0, 1]
 
 Nuevo cliente, su id es: 2 y el destino:2
+se agrego el cliente al vehiculo80
 
 Nuevo cliente, su id es: 3 y el destino:3
-agregando el cliente al vehiculo[2, 3]la mejor ruta es: [1, 2, 3]obtenemos una distancia de: 8
-se agrego el cliente al vehiculo [2, 3]ya que es la distancia más corta
+probando con el  vehiculo 80 obtenemos que la mejor ruta es: [1, 2, 3] y aquella ruta tiene una distancia de: 8
+se agrego el cliente al vehiculo 80 ya que es la distancia más corta
 
 Nuevo cliente, su id es: 4 y el destino:4
-agregando el cliente al vehiculo[2, 3, 4]la mejor ruta es: [1, 2, 3, 4]obtenemos una distancia de: 16
-se agrego el cliente al vehiculo [2, 3, 4]ya que es la distancia más corta
-como la mejor ruta no es compatible con la matriz de adyacencia debemos asignar otro automovilpor lo que los moviles quedan:[[2, 3], [4]]
+probando con el  vehiculo 80 obtenemos que la mejor ruta es: [1, 2, 3, 4] y aquella ruta tiene una distancia de: 16
+se agrego el cliente al vehiculo 80 ya que es la distancia más corta
+como la mejor ruta no es compatible con la matriz de adyacencia debemos asignar otro automovil 81por lo que los moviles quedan:[[2, 3], [4]]
 
 Nuevo cliente, su id es: 5 y el destino:2
-agregando el cliente al vehiculo[2, 3, 5]la mejor ruta es: [1, 2, 5, 3]obtenemos una distancia de: 8
-agregando el cliente al vehiculo[4, 5]la mejor ruta es: [1, 5, 4]obtenemos una distancia de: 6
-se agrego el cliente al vehiculo [4, 5]ya que es la distancia más corta
+probando con el  vehiculo 80 obtenemos que la mejor ruta es: [1, 2, 5, 3] y aquella ruta tiene una distancia de: 8
+probando con el  vehiculo 81 obtenemos que la mejor ruta es: [1, 5, 4] y aquella ruta tiene una distancia de: 6
+se agrego el cliente al vehiculo 81 ya que es la distancia más corta
 
 Nuevo cliente, su id es: 6 y el destino:3
-agregando el cliente al vehiculo[2, 3, 6]la mejor ruta es: [1, 2, 3, 6]obtenemos una distancia de: 8
-agregando el cliente al vehiculo[4, 5, 6]la mejor ruta es: [1, 5, 6, 4]obtenemos una distancia de: 16
-se agrego el cliente al vehiculo [2, 3, 6]ya que es la distancia más corta
+probando con el  vehiculo 80 obtenemos que la mejor ruta es: [1, 2, 3, 6] y aquella ruta tiene una distancia de: 8
+probando con el  vehiculo 81 obtenemos que la mejor ruta es: [1, 5, 6, 4] y aquella ruta tiene una distancia de: 16
+se agrego el cliente al vehiculo 80 ya que es la distancia más corta
+el vehiculo 80 se llenó
 
 Nuevo cliente, su id es: 7 y el destino:4
-agregando el cliente al vehiculo[4, 5, 7]la mejor ruta es: [1, 5, 4, 7]obtenemos una distancia de: 6
-se agrego el cliente al vehiculo [4, 5, 7]ya que es la distancia más corta
+probando con el  vehiculo 81 obtenemos que la mejor ruta es: [1, 5, 4, 7] y aquella ruta tiene una distancia de: 6
+se agrego el cliente al vehiculo 81 ya que es la distancia más corta
+el vehiculo 81 se llenó
+debe partir el último vehículo así que se asignará otro {0: 82}
+
+Nuevo cliente, su id es: 2 y el destino:2
+se agrego el cliente al vehiculo82
+los vehiculos que quedan son: {0: 82} compuestos de la siguiente manera: [[2]]

@@ -1,24 +1,15 @@
 import sys
 import copy
 import os
+import json
+
+matrices = json.loads(open('matrixZarpes.json').read())
+matrixComuna= matrices["adjacency"]
+matrix=matrices["distances"]
 
 
-#Matriz de distancia
-matrix = [
-	[0, 2, 9, 10],
-	[0, 0, 6, 4],
-	[0, 7, 0, 8],
-	[0, 3, 12, 0]
-]
-
-#Matriz de adyacencia 
-matrixComuna = [
-	[1, 1, 0, 0],
-	[1, 1, 1, 1],
-	[1, 0, 1, 0],
-	[1, 1, 0, 1]
-]
-
+auto=80
+deposito={0:copy.copy(auto)}
 
 archivo_log = open("log.txt", "w")
 archivo_log.write("La matriz de distancia es:"+'\n')
@@ -128,6 +119,7 @@ def llenar(idd):#agrega el cliente al vehículo que de la menor distancia
 			global g
 			global p
 			global vehicles	
+			global auto
 			aux=0	
 
 			print("vehicles",vehicles)
@@ -136,7 +128,7 @@ def llenar(idd):#agrega el cliente al vehículo que de la menor distancia
 				v.append(idd)
 				ruta=tsp(tuple(v))
 				distance=ruta[1]
-				archivo_log.write("agregando el cliente al vehiculo"+str(v)+"la mejor ruta es: "+str(ruta[0])+"obtenemos una distancia de: "+str(distance)+'\n')
+				archivo_log.write("probando con el  vehiculo "+str(deposito[i])+" obtenemos que la mejor ruta es: "+str(ruta[0])+" y aquella ruta tiene una distancia de: "+str(distance)+'\n')
 
 				if(i==0):
 					
@@ -145,12 +137,12 @@ def llenar(idd):#agrega el cliente al vehículo que de la menor distancia
 					
 						
 				elif(distance<distanceMin):
-					print("primer elif")
+					
 					vehicles[aux].remove(idd)
 					aux=i		
 
 				elif(distance>=distanceMin):
-					print("segundo elif")
+					
 					v.remove(idd)
 
 
@@ -159,7 +151,7 @@ def llenar(idd):#agrega el cliente al vehículo que de la menor distancia
 
 #desde acá verifico que cumplan la condición de la matriz, si no lo hace entonces se crea un nuevo vehículo mientras este sea menor a 5 y lo asigno ahí"""
 			#print("aux=",aux)
-			archivo_log.write("se agrego el cliente al vehiculo "+str(vehicles[aux])+"ya que es la distancia más corta"+'\n')
+			archivo_log.write("se agrego el cliente al vehiculo "+str(deposito[aux])+" ya que es la distancia más corta"+'\n')
 			rutaAux=tsp(tuple(vehicles[aux]))[0]
 			g = {}
 			p = [] 
@@ -171,23 +163,43 @@ def llenar(idd):#agrega el cliente al vehículo que de la menor distancia
 			if(matrixComuna[clientes[penultimo]-1][clientes[ultimo]-1]!=1 and len(vehicles)<5 ):
 
 				vehicles.append([])
+				auto+=1
+				indicador=copy.copy(auto)
+				deposito[len(vehicles)-1]=indicador				
 				vehicles[-1].append(idd)
 				vehicles[aux].remove(idd)
 
 				print("se agrego el cliente",idd,"al vehiculo",len(vehicles))
-				archivo_log.write("como la mejor ruta no es compatible con la matriz de adyacencia debemos asignar otro automovil "+"por lo que los moviles quedan:"+str(vehicles)+'\n')
+				archivo_log.write("como la mejor ruta no es compatible con la matriz de adyacencia debemos asignar otro automovil "+str(deposito[len(vehicles)-1])+"por lo que los moviles quedan:"+str(vehicles)+'\n')
 
 
 
 
-			else:
-				
+			else:				
 				print("se agrego el cliente",idd,"al vehículo",aux+1)
+
+			
 
 			if(len(vehicles[aux])==3):
 				print("el vehiculo",aux+1,"se llenó")
 				vehicles.pop(aux)
-				print("quedan",vehicles)	
+				archivo_log.write("el vehiculo "+str(deposito[aux])+" se llenó"+'\n')
+
+				if(len(deposito)==1):
+					deposito[0]+=1
+					archivo_log.write("debe partir el último vehículo así que se asignará otro "+str(deposito)+'\n')	
+
+				else:
+
+					for x in range(0,len(deposito),1):
+						if x < len(deposito)-1:
+							deposito[x]= deposito.pop(x+1)
+
+			
+						
+
+
+					
 			if(vehicles==[]):
 				vehicles.append([])
 
@@ -196,10 +208,8 @@ def llenar(idd):#agrega el cliente al vehículo que de la menor distancia
 if __name__ == '__main__':
 
 	# clientes=(2,3,4)
-	
 	clientes={1:1}
 	continuar=1
-	
 	isFull=0
 	distanceMin=0
 	aux=0
@@ -210,14 +220,16 @@ if __name__ == '__main__':
 		idd = int(input())
 		destino= int(input())
 		clientes[idd]=destino
-		archivo_log.write('\n'+"Nuevo cliente, su id es: "+str(idd)+" y el destino:"+str(destino)+'\n')
+		archivo_log.write("\n"+"Nuevo cliente, su id es: "+str(idd)+" y el destino:"+str(destino)+'\n')
 		
 		
 
 		for pos,i in enumerate(vehicles):
+			
 
 			if(i==[]):
 				i.append(idd)
+				archivo_log.write("se agrego el cliente al vehiculo"+str(deposito[0])+'\n')
 				print("agregado el cliente",idd, "al vehículo",pos+1)
 				#print(vehicles)
 				isFull=0
@@ -248,6 +260,7 @@ if __name__ == '__main__':
 
 
 	print("la ruta óptima para tus vehículos es",vehicles)	
+	archivo_log.write("los vehiculos que quedan son: "+str(deposito)+" compuestos de la siguiente manera: "+str(vehicles))
 	
 	
 	
