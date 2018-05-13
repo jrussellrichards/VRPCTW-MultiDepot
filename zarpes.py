@@ -6,6 +6,7 @@ import json
 matrices = json.loads(open('matrixZarpes.json').read())
 matrixComuna= matrices["adjacency"]
 matrix=matrices["distances"]
+numberVehicles=matrices["numberVehicles"]
 
 
 auto=80
@@ -160,7 +161,7 @@ def llenar(idd):#agrega el cliente al vehículo que de la menor distancia
 			penultimo=rutaAux[-2]
 
 
-			if(matrixComuna[clientes[penultimo]-1][clientes[ultimo]-1]!=1 and len(vehicles)<5 ):
+			if(matrixComuna[clientes[penultimo]-1][clientes[ultimo]-1]!=1 and len(vehicles)<numberVehicles ):
 
 				vehicles.append([])
 				auto+=1
@@ -180,7 +181,7 @@ def llenar(idd):#agrega el cliente al vehículo que de la menor distancia
 
 			
 
-			if(len(vehicles[aux])==3):
+			if(len(vehicles[aux])==8):
 				print("el vehiculo",aux+1,"se llenó")
 				vehicles.pop(aux)
 				archivo_log.write("el vehiculo "+str(deposito[aux])+" se llenó"+'\n')
