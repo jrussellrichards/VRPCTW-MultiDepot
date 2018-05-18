@@ -8,9 +8,10 @@ import os
 
 clear = lambda: os.system('cls')
 igen=0
+false_client={'900':5,'901':12,'902':24}
 class Problem_Genetic:#clase que modela el problema: Recibe los clientes, la capacidad del vehículo y la cantidad de vehículos.
-              #Cada ruta es un cromosoma y son modelados como listas.
-               #Cada individuo corresponde al total de clientes en una ruta, los cuales son guardados en una lista simple
+                      #Cada ruta es un cromosoma y son modelados como listas.
+                      #Cada individuo corresponde al total de clientes en una ruta, los cuales son guardados en una lista simple
 
 
     def __init__(self, clientes,idclientes,capacidadvehiculo,cantidadvehiculo ):
@@ -19,6 +20,7 @@ class Problem_Genetic:#clase que modela el problema: Recibe los clientes, la cap
         self.cantidadvehiculo=cantidadvehiculo
         self.clientes=clientes
         self.idclientes=idclientes
+
 
     
     def mutation(self,idclientes):    
@@ -39,21 +41,23 @@ def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para 
         vehicle_use=0
 
         	
-    
+        
         
         for subRoute in route:
             vehicle_use+=1
-            lastCustomerID = 0
+            positionLastCustomerID = 0
             subRouteDistance = 0
             #print("subruta",subRoute)
             for customerID in subRoute:
-                distance=distances[customerID][lastCustomerID]
+                #distance1=distances[customerID][lastCustomerID]
+                positionCustomerId=Problem_Genetic.clientes[str(customerID)]["position"]
+                distance=distances[positionCustomerId][positionLastCustomerID]
                 #print("customerID,lastCustomerID,distancia",customerID,lastCustomerID,distances[customerID][lastCustomerID])          
                 subRouteDistance=subRouteDistance+distance
-                lastCustomerID=customerID
+                positionLastCustomerID=positionCustomerId
 
             #print("last cutomer id, 0",lastCustomerID,distances[lastCustomerID][0])    
-            routDistance+=subRouteDistance + distances[lastCustomerID][0]
+            routDistance+=subRouteDistance + distances[positionLastCustomerID][0]
             
     #
         #fitness=routDistance*vehicle_use*vehicle_use
@@ -71,13 +75,13 @@ def generateRoute(individue,Problem_Genetic): #Genero sub rutas las cuales repre
         vehicleLoad=0
         lastCustomerID=0
         elapsedTime=0
+        false_client=900
+
 
         
-
         for customerID in individue:            
 
             demanda=Problem_Genetic.clientes[str(customerID)]["demand"]
-
             vehicleLoadActualizada=demanda+vehicleLoad
 
             
@@ -223,7 +227,6 @@ if __name__ == "__main__":
     capacidadvehiculo=problem["vehicle_capacity"]   
     print(cantidadvehiculo,capacidadvehiculo)
     idclientes=[]
-        
 
     for i in clientes.keys():
         idclientes.append(int(i))
@@ -236,7 +239,7 @@ if __name__ == "__main__":
 
     instance=Problem_Genetic(clientes,idclientes,capacidadvehiculo,cantidadvehiculo)
     #def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#k participantes en el torneo
-    genetic_algorithm(instance,2,min,600,800,0.25,0.02)
+    genetic_algorithm(instance,2,min,600,800,0.42,0.02)
 
     tiempo_final = time() 
     print("tiempo de ejecución",tiempo_final-tiempo_inicial)
