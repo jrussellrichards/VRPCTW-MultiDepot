@@ -14,13 +14,13 @@ class Problem_Genetic:#clase que modela el problema: Recibe los clientes, la cap
                       #Cada individuo corresponde al total de clientes en una ruta, los cuales son guardados en una lista simple
 
 
-    def __init__(self, clientes,idclientes,capacidadvehiculo,cantidadvehiculo ):
+    def __init__(self, clientes,idclientes,capacidadvehiculo,cantidadvehiculo,vehicles ):
 
         self.capacidadvehiculo=capacidadvehiculo
         self.cantidadvehiculo=cantidadvehiculo
         self.clientes=clientes
         self.idclientes=idclientes
-
+        self.vehicles=vehicles
 
     
     def mutation(self,idclientes):    
@@ -39,19 +39,20 @@ def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para 
         routDistance=0
         capacity=0
         vehicle_use=0
-
-        	
+        infactible=0	
         
-        
+      #  print(route)
         for subRoute in route:
             vehicle_use+=1
             positionLastCustomerID = 0
-            subRouteDistance = 0
+            subRouteDistance = 0 - distances[Problem_Genetic.clientes[str(subRoute[0])]["position"]][0]
             #print("subruta",subRoute)
             for customerID in subRoute:
                 #distance1=distances[customerID][lastCustomerID]
                 positionCustomerId=Problem_Genetic.clientes[str(customerID)]["position"]
                 distance=distances[positionCustomerId][positionLastCustomerID]
+               # print("distancia entre customerID y lastCustomerID",distance, positionCustomerId,positionLastCustomerID)
+
                 #print("customerID,lastCustomerID,distancia",customerID,lastCustomerID,distances[customerID][lastCustomerID])          
                 subRouteDistance=subRouteDistance+distance
                 positionLastCustomerID=positionCustomerId
@@ -59,10 +60,10 @@ def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para 
             #print("last cutomer id, 0",lastCustomerID,distances[lastCustomerID][0])    
             routDistance+=subRouteDistance + distances[positionLastCustomerID][0]
             
-    #
+    #   
         #fitness=routDistance*vehicle_use*vehicle_use
         fitness=routDistance
-        if(vehicle_use>Problem_Genetic.cantidadvehiculo ):
+        if(vehicle_use>Problem_Genetic.cantidadvehiculo || infactible==1 ):
             fitness=fitness*1000000000000000
             
                     
@@ -74,11 +75,14 @@ def generateRoute(individue,Problem_Genetic): #Genero sub rutas las cuales repre
         capacidadvehiculo=Problem_Genetic.capacidadvehiculo
         vehicleLoad=0
         lastCustomerID=0
-        elapsedTime=0
         false_client=900
+        vehicles_aux=copy.copy(idvehicles)
+
+        #random.shuffle(vehicles_aux)
+        pos_vehicle=vehicles_aux.pop(0)
+        subRoute.append(pos_vehicle)
 
 
-        
         for customerID in individue:            
 
             demanda=Problem_Genetic.clientes[str(customerID)]["demand"]
@@ -89,15 +93,15 @@ def generateRoute(individue,Problem_Genetic): #Genero sub rutas las cuales repre
                 subRoute.append(customerID)
                 vehicleLoad=vehicleLoadActualizada
             else:
-
                 route.append(subRoute)
-                subRoute= [customerID]
+                pos_vehicle=vehicles_aux.pop(0)
+                subRoute=[pos_vehicle]
+                subRoute.append(customerID)
                 vehicleLoad=demanda
             lastCustomerID=customerID
 
         if subRoute != []:
             route.append(subRoute)
-        
         return route
     
 def crossover(ind1, ind2):
@@ -220,26 +224,30 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
 
 if __name__ == "__main__":
 
-    clientes = json.loads(open('customCustomers.json').read())
+    clients_vehicles = json.loads(open('customCustomers.json').read())
+    idclientes=clients_vehicles["clients"]
+    demands_position=clients_vehicles["clients_vehicles"]
     problem = json.loads(open('customProblem.json').read())
     distances= problem["distance_matrix"]
     cantidadvehiculo=problem["max_vehicle_number"]
-    capacidadvehiculo=problem["vehicle_capacity"]   
+    capacidadvehiculo=problem["vehicle_capacity"] 
+    vehicles=problem["vehicles"]
+    print(ventanas)
     print(cantidadvehiculo,capacidadvehiculo)
-    idclientes=[]
+    idvehicles=[]
 
-    for i in clientes.keys():
-        idclientes.append(int(i))
-
-
+  
+    for i in vehicles.keys():
+        idvehicles.append(int(i))  
     tiempo_inicial= time() 
-
-    
+    #Para optimizar el tiempo de computo, modificamos la matriz con distancia 0 a cada uno de los vehiculos
+   # for i in idvehicles:
+   #     distances[demands_position[str(i)]["position"]][0]=0
     #distances = {0:w0,1:w1,2:w2,3:w3,4:w4,5:w5,6:w6,7:w7,8:w8}
 
-    instance=Problem_Genetic(clientes,idclientes,capacidadvehiculo,cantidadvehiculo)
+    instance=Problem_Genetic(demands_position,idclientes,capacidadvehiculo,cantidadvehiculo,vehicles)
     #def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#k participantes en el torneo
-    genetic_algorithm(instance,2,min,600,800,0.42,0.02)
+    genetic_algorithm(instance,2,min,20,800,0.42,0.02)
 
     tiempo_final = time() 
     print("tiempo de ejecución",tiempo_final-tiempo_inicial)

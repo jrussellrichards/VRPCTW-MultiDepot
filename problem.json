@@ -2,6 +2,7 @@
 "max_vehicle_number": 30,
 "vehicle_capacity": 200.0,
 
+
 "distance_matrix": [
         [
             0.0,
