@@ -8,9 +8,10 @@ import os
 
 
 #ruta=[[21, 31, 19, 17, 13, 7, 26],[12, 1, 16, 30],[27, 24],[29, 18, 8, 9, 22, 15, 10, 25, 5, 20],[14, 28, 11, 4, 23, 3, 2, 6]]
+#rutaan80k10 [[1, 7 ,21, 40],[10 ,63 ,11 ,24 ,6, 23 ],[13 ,74 ,60, 39 ,3 ,77 ,51 ],[17 ,31 ,27 ,59 ,5 ,44 ,12, 62 ],[29 ,20 ,75 ,57 ,19 ,26 ,35 ,65 ,69 ,56 ,47 ,15 ,33 ,64 ],[30 ,78 ,61 ,16 ,43 ,68 ,8 ,37 ,2 ,34 ],[38 ,72 ,54 ,9 ,55 ,41 ,25 ,46],[42 ,53 ,66 ,67 ,36 ,73 ,49 ],[52 ,28 ,79 ,18 ,48 ,14 ,71],[58 ,32 ,4 ,22 ,45 ,50 ,76, 70 ]] 
 
 
-ruta=[[100, 20, 27, 24, 6, 13, 26, 30], [101, 28, 18, 8, 22, 29, 10, 15, 25, 5], [102, 9, 11, 4, 23, 2, 3, 14], [103, 16, 7, 17, 31, 21, 19], [104, 1, 12]]
+ruta= [[1, 7 ,21, 40],[10 ,63 ,11 ,24 ,6, 23 ],[13 ,74 ,60, 39 ,3 ,77 ,51 ],[17 ,31 ,27 ,59 ,5 ,44 ,12, 62 ],[29 ,20 ,75 ,57 ,19 ,26 ,35 ,65 ,69 ,56 ,47 ,15 ,33 ,64 ],[30 ,78 ,61 ,16 ,43 ,68 ,8 ,37 ,2 ,34 ],[38 ,72 ,54 ,9 ,55 ,41 ,25 ,46],[42 ,53 ,66 ,67 ,36 ,73 ,49 ],[52 ,28 ,79 ,18 ,48 ,14 ,71],[58 ,32 ,4 ,22 ,45 ,50 ,76, 70 ]] 
 clients_vehicles = json.loads(open('customCustomers.json').read())
 clientes = clients_vehicles["clients_vehicles"]
 problem = json.loads(open('customProblem.json').read())
@@ -31,21 +32,17 @@ def fitness(): #Se calcula la evaluación fitness para cada ruta
        
         for subRoute in route:
             vehicle_use+=1
-            positionLastCustomerID = 0
+            lastCustomerID = 0
             subRouteDistance = 0
             #print("subruta",subRoute)
             for customerID in subRoute:
-                #distance1=distances[customerID][lastCustomerID]
-                positionCustomerId=clientes[str(customerID)]["position"]
-
-                distance=distances[positionCustomerId][positionLastCustomerID]
-                #print("distancia entre customerID y lastCustomerID",distance, positionCustomerId,positionLastCustomerID)
+                distance=distances[customerID][lastCustomerID]
                 #print("customerID,lastCustomerID,distancia",customerID,lastCustomerID,distances[customerID][lastCustomerID])          
                 subRouteDistance=subRouteDistance+distance
-                positionLastCustomerID=positionCustomerId
+                lastCustomerID=customerID
 
             #print("last cutomer id, 0",lastCustomerID,distances[lastCustomerID][0])    
-            routDistance+=subRouteDistance + distances[positionLastCustomerID][0]
+            routDistance+=subRouteDistance + distances[lastCustomerID][0]
             
     #
         #fitness=routDistance*vehicle_use*vehicle_use

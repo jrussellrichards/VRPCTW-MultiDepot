@@ -6,6 +6,7 @@ from time import time
 import os
 
 
+
 clear = lambda: os.system('cls')
 igen=0
 class Problem_Genetic:#clase que modela el problema: Recibe los clientes, la capacidad del vehículo y la cantidad de vehículos.
@@ -38,8 +39,8 @@ def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para 
         capacity=0
         vehicle_use=0
 
-        	
-    
+            
+        
         
         for subRoute in route:
             vehicle_use+=1
@@ -71,8 +72,6 @@ def generateRoute(individue,Problem_Genetic): #Genero sub rutas las cuales repre
         vehicleLoad=0
         lastCustomerID=0
         elapsedTime=0
-
-        
 
         for customerID in individue:            
 
@@ -137,6 +136,20 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
             
             
     def new_generation_t(Problem_Genetic,k,opt,population,n_parents,n_directs,prob_mutate):
+
+        def selection(Problem_Genetic,population,n,opt):
+
+            winners=[]
+            best=population[0]
+            for i in range(len(population)):
+                fitness1=fitness(population[i],Problem_Genetic)                
+                for i in range(n):
+                    fitness2=fitness(population[i+1],Problem_Genetic)
+                    if(fitness2<fitness1):
+                        winners.append()
+
+
+
     
 
         def tournament_selection(Problem_Genetic,population,n,k,opt):#devuelve los n ganadores ganadores del torneo
@@ -154,6 +167,8 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
                 else:
                     winners.append(padre2)                  
             return winners
+
+
             
         def cross_parents(Problem_Genetic,parents):#Devuelve los cromosomas resultantes por cruza. Se itera de 2 en 2 porque se reproducen de a pares y la función recibe varios padres
             childs=[]
@@ -216,27 +231,26 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
 
 if __name__ == "__main__":
 
-    clientes = json.loads(open('customCustomers.json').read())
+    clients_vehicles = json.loads(open('customCustomers.json').read())
+    idclientes=clients_vehicles["clients"]
+    demands_position=clients_vehicles["clients_vehicles"]
     problem = json.loads(open('customProblem.json').read())
     distances= problem["distance_matrix"]
     cantidadvehiculo=problem["max_vehicle_number"]
-    capacidadvehiculo=problem["vehicle_capacity"]   
+    capacidadvehiculo=problem["vehicle_capacity"] 
     print(cantidadvehiculo,capacidadvehiculo)
-    idclientes=[]
+
+  
+    tiempo_inicial= time() 
         
 
-    for i in clientes.keys():
-        idclientes.append(int(i))
-
-
-    tiempo_inicial= time() 
 
     
     #distances = {0:w0,1:w1,2:w2,3:w3,4:w4,5:w5,6:w6,7:w7,8:w8}
 
-    instance=Problem_Genetic(clientes,idclientes,capacidadvehiculo,cantidadvehiculo)
+    instance=Problem_Genetic(demands_position,idclientes,capacidadvehiculo,cantidadvehiculo)
     #def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#k participantes en el torneo
-    genetic_algorithm(instance,2,min,600,800,0.25,0.02)
+    genetic_algorithm(instance,2,min,4200,800,0.42,0.02) #4200/800 max por ahora con promedio de 835
 
     tiempo_final = time() 
     print("tiempo de ejecución",tiempo_final-tiempo_inicial)

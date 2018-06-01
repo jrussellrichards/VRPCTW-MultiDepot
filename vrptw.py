@@ -262,7 +262,7 @@ if __name__ == "__main__":
 
     instance=Problem_Genetic(demands_position,idclientes,capacidadvehiculo,cantidadvehiculo,vehicles)
     #def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#k participantes en el torneo
-    genetic_algorithm(instance,2,min,600,800,0.42,0.02)
+    genetic_algorithm(instance,2,min,1200,800,0.42,0.02)
 
     tiempo_final = time() 
     print("tiempo de ejecución",tiempo_final-tiempo_inicial)
