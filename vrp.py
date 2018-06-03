@@ -137,16 +137,9 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
             
     def new_generation_t(Problem_Genetic,k,opt,population,n_parents,n_directs,prob_mutate):
 
-        def selection(Problem_Genetic,population,n,opt):
+        def selection(Problem_Genetic,population,n):
 
-            winners=[]
-            best=population[0]
-            for i in range(len(population)):
-                fitness1=fitness(population[i],Problem_Genetic)                
-                for i in range(n):
-                    fitness2=fitness(population[i+1],Problem_Genetic)
-                    if(fitness2<fitness1):
-                        winners.append()
+            sorted(range(n), key=lambda x: fitness(x,Problem_Genetic))
 
 
 
@@ -183,7 +176,7 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
                     
             return population
                         
-        directs        =   tournament_selection(Problem_Genetic, population, n_directs, k, opt)
+        directs        =   selection(Problem_Genetic, population, n_directs)
         crosses        =   cross_parents(Problem_Genetic,tournament_selection(Problem_Genetic, population, n_parents, k, opt))#la cruza se escoge con otros ganadores del torneo para mantener la diversidad
         mutations      =   mutate(Problem_Genetic, crosses, prob_mutate)
         new_generation =   directs + mutations
