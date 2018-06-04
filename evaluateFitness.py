@@ -52,6 +52,21 @@ def fitness(): #Se calcula la evaluación fitness para cada ruta
                     
         return fitness,vehicle_use
 
+def selection(Problem_Genetic,population,n):
+
+            heap = []
+            # Note: below is for illustration. It can be replaced by 
+            # heapq.nlargest( bigArray, k )
+            for item in population:
+                # If we have not yet found k items, or the current item is larger than
+                # the smallest item on the heap,
+                if len(heap) < n or fitness(item,Problem_Genetic) < heap[0]:
+                    # If the heap is full, remove the smallest element on the heap.
+                    if len(heap) == k: heapq.heappop( heap )
+                    # add the current element as the new smallest.
+                    heapq.heappush( heap, item )
+            return heap
+
 
 if __name__ == "__main__":
 
@@ -61,4 +76,5 @@ if __name__ == "__main__":
     cantidadvehiculo=problem["max_vehicle_number"]
     capacidadvehiculo=problem["vehicle_capacity"]   
     print(cantidadvehiculo,capacidadvehiculo)
+
     print(fitness())

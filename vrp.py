@@ -4,11 +4,29 @@ import re
 import copy
 from time import time
 import os
+import heapq
+
 
 
 
 clear = lambda: os.system('cls')
 igen=0
+
+
+def heapSearch( bigArray, k ):
+    heap = []
+    # Note: below is for illustration. It can be replaced by 
+    # heapq.nlargest( bigArray, k )
+    for item in bigArray:
+        # If we have not yet found k items, or the current item is larger than
+        # the smallest item on the heap,
+        if len(heap) < k or item > heap[0]:
+            # If the heap is full, remove the smallest element on the heap.
+            if len(heap) == k: heapq.heappop( heap )
+            # add the current element as the new smallest.
+            heapq.heappush( heap, item )
+    return heap
+
 class Problem_Genetic:#clase que modela el problema: Recibe los clientes, la capacidad del vehículo y la cantidad de vehículos.
               #Cada ruta es un cromosoma y son modelados como listas.
                #Cada individuo corresponde al total de clientes en una ruta, los cuales son guardados en una lista simple
@@ -139,8 +157,14 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
 
         def selection(Problem_Genetic,population,n):
 
-            sorted(range(n), key=lambda x: fitness(x,Problem_Genetic))
+            
+            # Note: below is for illustration. It can be replaced by 
+            # heapq.nlargest( bigArray, k )
+            heapq.heapify(population)
+            heap=heapq.nsmallest(n, population,key= lambda x: fitness(x,Problem_Genetic))
 
+    
+            return heap
 
 
     
@@ -243,7 +267,7 @@ if __name__ == "__main__":
 
     instance=Problem_Genetic(demands_position,idclientes,capacidadvehiculo,cantidadvehiculo)
     #def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#k participantes en el torneo
-    genetic_algorithm(instance,2,min,4200,800,0.42,0.02) #4200/800 max por ahora con promedio de 835
+    genetic_algorithm(instance,2,min,2500,800,0.85,0.05) #4200/800 max por ahora con promedio de 835
 
     tiempo_final = time() 
     print("tiempo de ejecución",tiempo_final-tiempo_inicial)
