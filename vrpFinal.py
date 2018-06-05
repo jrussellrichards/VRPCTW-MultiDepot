@@ -4,7 +4,6 @@ import re
 import copy
 from time import time
 import os
-import heapq
 
 
 clear = lambda: os.system('cls')
@@ -14,13 +13,13 @@ class Problem_Genetic:#clase que modela el problema: Recibe los clientes, la cap
                       #Cada individuo corresponde al total de clientes en una ruta, los cuales son guardados en una lista simple
 
 
-    def __init__(self, clientes,idclientes,capacidadvehiculo,cantidadvehiculo ):
+    def __init__(self, clientes,idclientes,capacidadvehiculo,cantidadvehiculo,vehicles ):
 
         self.capacidadvehiculo=capacidadvehiculo
         self.cantidadvehiculo=cantidadvehiculo
         self.clientes=clientes
         self.idclientes=idclientes
-       
+        self.vehicles=vehicles
 
     
     def mutation(self,idclientes):    
@@ -61,7 +60,7 @@ def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para 
                 #print("customerID,lastCustomerID,distancia",customerID,lastCustomerID,distances[customerID][lastCustomerID])          
                 subRouteDistance=subRouteDistance+distance
                # if(subRouteDistance>ventana_retiro_max or subRouteDistance<ventana_retiro_min):
-                #	infactible=1
+                #   infactible=1
                 positionLastCustomerID=positionCustomerId
 
             #print("last cutomer id, 0",lastCustomerID,distances[lastCustomerID][0])    
@@ -83,20 +82,20 @@ def generateRoute(individue,Problem_Genetic): #Genero sub rutas las cuales repre
         vehicleLoad=0
         lastCustomerID=0
         false_client=900
-        #vehicles_aux=copy.copy(idvehicles)
+        vehicles_aux=copy.copy(idvehicles)
 
 
         #random.shuffle(vehicles_aux)
 
-        #pos_vehicle=vehicles_aux.pop(0)
+        pos_vehicle=vehicles_aux.pop(0)
 
         distancia=0
-        #subRoute.append(pos_vehicle)
-        #lastCustomerID=pos_vehicle
+        subRoute.append(pos_vehicle)
+        lastCustomerID=pos_vehicle
 
         for customerID in individue:            
-            ventana_retiro_min=Problem_Genetic.clientes[str(customerID)]["due_time"]
-            ventana_retiro_max=Problem_Genetic.clientes[str(customerID)]["ready_time"]
+            ventana_retiro_min=Problem_Genetic.clientes[str(customerID)]["ventanas"]["retiro"][0]
+            ventana_retiro_max=Problem_Genetic.clientes[str(customerID)]["ventanas"]["retiro"][1]
             demanda=Problem_Genetic.clientes[str(customerID)]["demand"]
             vehicleLoadActualizada=demanda+vehicleLoad
             distancia+=distances[Problem_Genetic.clientes[str(customerID)]["position"]][Problem_Genetic.clientes[str(lastCustomerID)]["position"]]
@@ -240,9 +239,7 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
     #print(bestChromosome)
 
     finalRoute=generateRoute(bestChromosome,Problem_Genetic)
-    #print(finalRoute)
-    for i,r in enumerate(finalRoute):
-        print("Ruta ",i,":",r)
+    print(finalRoute)
     print("fitness=",fitness(bestChromosome,Problem_Genetic))
 
 
@@ -253,29 +250,27 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
 
 if __name__ == "__main__":
 
-    problem = json.loads(open('datosTw/C101.json').read())
-    clientes=problem["customers"]
-    dict_idclientes=clientes.keys()
+    clients_vehicles = json.loads(open('customCustomers.json').read())
+    idclientes=clients_vehicles["clients"]
+    demands_position=clients_vehicles["clients_vehicles"]
+    problem = json.loads(open('customProblem.json').read())
     distances= problem["distance_matrix"]
     cantidadvehiculo=problem["max_vehicle_number"]
     capacidadvehiculo=problem["vehicle_capacity"] 
+    vehicles=problem["vehicles"]
     print(cantidadvehiculo,capacidadvehiculo)
-    
+    idvehicles=[]
 
-    idclientes=[]
-    for i in dict_idclientes:
-        idclientes.append(int(i))
-
-    idvehicles=[]    
-    #for i in vehicles.keys():
-     #   idvehicles.append(int(i))  
-    #tiempo_inicial= time() 
+  
+    for i in vehicles.keys():
+        idvehicles.append(int(i))  
+    tiempo_inicial= time() 
     #Para optimizar el tiempo de computo, modificamos la matriz con distancia 0 a cada uno de los vehiculos
    # for i in idvehicles:
    #     distances[demands_position[str(i)]["position"]][0]=0
     #distances = {0:w0,1:w1,2:w2,3:w3,4:w4,5:w5,6:w6,7:w7,8:w8}
 
-    instance=Problem_Genetic(clientes,idclientes,capacidadvehiculo,cantidadvehiculo)
+    instance=Problem_Genetic(demands_position,idclientes,capacidadvehiculo,cantidadvehiculo,vehicles)
     #def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#k participantes en el torneo
     genetic_algorithm(instance,2,min,1200,800,0.42,0.02)
 
