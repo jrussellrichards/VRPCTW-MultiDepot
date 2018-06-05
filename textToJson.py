@@ -10,7 +10,7 @@ if __name__ == "__main__":
     number_vechile=5
     vehicle_capacity=100
 
-    matrix = np.loadtxt('test/an80k10.vrp', usecols=(1,2))
+    matrix = np.loadtxt('test/an32k5.vrp', usecols=(1,2))
     f = open("customProblem.json","w") 
     f.write("{ \n"+'"max_vehicle_number":'+str(number_vechile)+", \n")
     f.write('"vehicle_capacity":'+str(vehicle_capacity)+","+"\n")
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     #End convertir distancias
 
 
-    fclientes=np.loadtxt('test/an80k10clientes.vrp', usecols=())
+    fclientes=np.loadtxt('test/an32k5clientes.vrp', usecols=())
     
     for i,c in enumerate(fclientes):
         f.write('"'+str(i+1)+'":'+'{"demand":'+str(c[1])+"},\n")
