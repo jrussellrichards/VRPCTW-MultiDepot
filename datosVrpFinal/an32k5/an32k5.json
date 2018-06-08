@@ -1,4 +1,14 @@
 {
+"vehicles":{
+
+"1":{"position":0},
+"2":{"position":0},
+"3":{"position":0},
+"4":{"position":0},
+"5":{"position":0},
+
+
+},
 
 "customers":{
 "0":{"position":0,"service_time":0,"hora_vuelo":5000,"demand":0.0},

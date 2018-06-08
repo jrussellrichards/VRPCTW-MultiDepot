@@ -2,7 +2,7 @@
 
 "customers":{
 "0":{"position":0,"service_time":0,"hora_vuelo":5000,"demand":0.0},
-"1":{"position":1,"service_time":0,"hora_vuelo":0,"demand":19.0},
+"1":{"position":1,"service_time":0,"hora_vuelo":5000,"demand":19.0},
 "2":{"position":2,"service_time":0,"hora_vuelo":5000,"demand":21.0},
 "3":{"position":3,"service_time":0,"hora_vuelo":5000,"demand":6.0},
 "4":{"position":4,"service_time":0,"hora_vuelo":5000,"demand":19.0},
