@@ -12,13 +12,17 @@ import heapq
 clear = lambda: os.system('cls')
 igen=0
 
-def distance_cities(vehicle):
-    print(vehicle)
-    print(vehicles[str(i)]["position"])
-    sum=0
-    for j in distances[vehicles[str(i)]["position"]]:
-        sum+= j
-    return sum
+def vehicle_distance_cities(vehicle):
+    suma=0
+    for j in distances[vehicles[str(vehicle)]["position"]]:
+        suma+= j
+    return suma
+def order_vehicles_distances(vehicles):
+
+    heapq.heapify(vehicles)
+    heap=heapq.nsmallest(len(vehicles), vehicles,key= lambda x: vehicle_distance_cities(x))
+    return heap
+
 
 def heapSearch( bigArray, k ):
     heap = []
@@ -290,9 +294,12 @@ if __name__ == "__main__":
 
     for i in dict_idvehicles:
         idvehicles.append(int(i))
-    print(idvehicles)   
+      
 
-    print(distance_cities(idvehicles[1]))
+    
+
+    idvehicles=order_vehicles_distances(idvehicles)
+    print(idvehicles)
 
     
     #for i in vehicles.keys():
