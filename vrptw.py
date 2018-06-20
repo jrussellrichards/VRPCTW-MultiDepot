@@ -94,6 +94,8 @@ def generateRoute(individue,Problem_Genetic): #Genero sub rutas las cuales repre
 
         for customerID in individue:
             retorno_customer=clientes[str(customerID)]["hora_vuelo"] 
+            hora_max_recogida=clientes[str(customerID)]["hora_max_recogida"]
+            hora_min_recogida=clientes[str(customerID)]["hora_min_recogida"]
              #se debe setear la hora de vuelo del origen como infinita
             if(retorno_customer<retorno_debido):#La hora en que debe llegar el vehículo es la cota mínima de las restricciones de horarios de vuelo
                 retorno_debido=retorno_customer                     
@@ -105,9 +107,9 @@ def generateRoute(individue,Problem_Genetic): #Genero sub rutas las cuales repre
 
             vehicleLoadActualizada=demanda+vehicleLoad            
             updatedElapsedTime = elapsedTime+distance+service_time+returnTime #tiempo transcurrido hasta el momento mas el tiempo que demora en llegar al cliente actual(distancia=tiempo)
-
+            hora_retiro=updatedElapsedTime - returnTime
             
-            if (vehicleLoadActualizada <= capacidadvehiculo ) and (updatedElapsedTime <= retorno_debido):
+            if (vehicleLoadActualizada <= capacidadvehiculo ) and (updatedElapsedTime <= retorno_debido) and (hora_retiro<= hora_max_recogida ) and ( hora_retiro >= hora_min_recogida ):
                 subRoute.append(customerID)
                 vehicleLoad=vehicleLoadActualizada
                 elapsedTime = updatedElapsedTime - returnTime
@@ -261,7 +263,7 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
 if __name__ == "__main__":
 
     tiempo_inicial = time()
-    problem = json.loads(open('datosTw/C101.json').read())
+    problem = json.loads(open('datosTw/an32k5/an32k5.json').read())
     clientes=problem["customers"]
     dict_idclientes=clientes.keys()
     distances= problem["distance_matrix"]

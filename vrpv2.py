@@ -12,17 +12,6 @@ import heapq
 clear = lambda: os.system('cls')
 igen=0
 
-def vehicle_distance_cities(vehicle):
-    suma=0
-    for j in distances[vehicles[str(vehicle)]["position"]]:
-        suma+= j
-    return suma
-def order_vehicles_distances(vehicles):
-
-    heapq.heapify(vehicles)
-    heap=heapq.nsmallest(len(vehicles), vehicles,key= lambda x: vehicle_distance_cities(x))
-    return heap
-
 
 def heapSearch( bigArray, k ):
     heap = []
@@ -43,13 +32,13 @@ class Problem_Genetic:#clase que modela el problema: Recibe los clientes, la cap
                #Cada individuo corresponde al total de clientes en una ruta, los cuales son guardados en una lista simple
 
 
-    def __init__(self, clientes,idclientes,capacidadvehiculo,cantidadvehiculo,idvehicles ):
+    def __init__(self, clientes,idclientes,capacidadvehiculo,idvehicles ):
 
         self.capacidadvehiculo=capacidadvehiculo
-        self.cantidadvehiculo=cantidadvehiculo
+        self.cantidadvehiculo=len(idvehicles)
         self.clientes=clientes
         self.idclientes=idclientes
-        self.vehicles=idvehicles
+        self.idvehicles=idvehicles
 
     
     def mutation(self,idclientes):    
@@ -58,36 +47,43 @@ class Problem_Genetic:#clase que modela el problema: Recibe los clientes, la cap
         cromo = idclientes[:start] + idclientes[stop:start-1:-1] + idclientes[stop+1:]
         return cromo 
 
+    
 
 
 
-def fitness(individue,Problem_Genetic,vehicles): #Se calcula la evaluación fitness para cada ruta
 
-        route=generateRoute(individue,Problem_Genetic,vehicles)
+
+def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para cada ruta
+
+        route=generateRoute(individue,Problem_Genetic)
         subRouteDistance=0
         routDistance=0
         capacity=0
         vehicle_use=0
-        vehicles=Problem_Genetic.idvehicles
-        order_vehicles=[]
+        usados=[]
+
+        for i in individue:
+            if (i not in vehicles):
+                for j in individue:
+                    
+
+
 
             
         
         
         for subRoute in route:
-
-            vehicle=min(vehicles,key=lambda x:[vehicles[str(x)]["position"]][clientes[str(subRoute[0])]["position"]])
             vehicle_use+=1
             lastCustomerID = 0
             subRouteDistance = 0
             #print("subruta",subRoute)
             for customerID in subRoute:
-                distance=distances[clientes[str(customerID)]["position"]][clientes[str(lastCustomerID)]["position"]]
+                distance=distances[customerID][lastCustomerID]
                 #print("customerID,lastCustomerID,distancia",customerID,lastCustomerID,distances[customerID][lastCustomerID])          
                 subRouteDistance=subRouteDistance+distance
                 lastCustomerID=customerID
 
-            #print("last cutomer id, 0",lastCustomerID,distances[lastCustomerID][0])    
+            # print("last cutomer id, 0",lastCustomerID,distances[lastCustomerID][0])    
             routDistance+=subRouteDistance + distances[lastCustomerID][0]
             
     #
@@ -99,48 +95,35 @@ def fitness(individue,Problem_Genetic,vehicles): #Se calcula la evaluación fitn
                     
         return fitness,vehicle_use
 
-def generateRoute(individue,Problem_Genetic,vehicles): #Genero sub rutas las cuales representan a un vehículo, cada una es una lista y están contenidas en una lista ruta
-        route=[]
-        subRoute = []
-        capacidadvehiculo=Problem_Genetic.capacidadvehiculo
-        vehicleLoad=0
-        lastCustomerID=0
-        elapsedTime=0
-        retorno_debido=90000
+# def generateRoute(individue,Problem_Genetic): #Genero sub rutas las cuales representan a un vehículo, cada una es una lista y están contenidas en una lista ruta
+#         route=[]
+#         subRoute = []
+#         capacidadvehiculo=Problem_Genetic.capacidadvehiculo
+#         vehicleLoad=0
+#         lastCustomerID=0
+#         elapsedTime=0
 
+#         for customerID in individue:            
 
-        for customerID in individue:
-            retorno_customer=clientes[str(customerID)["position"]]["hora_vuelo"] 
-            hora_max_recogida=clientes[str(customerID)["position"]]["hora_max_recogida"]
-            hora_min_recogida=clientes[str(customerID)["position"]]["hora_min_recogida"]  
-             #se debe setear la hora de vuelo del origen como infinita
-            if(retorno_customer<retorno_debido):#La hora en que debe llegar el vehículo es la cota mínima de las restricciones de horarios de vuelo
-                retorno_debido=retorno_customer                     
+#             demanda=Problem_Genetic.clientes[str(customerID)]["demand"]
 
-            demanda=Problem_Genetic.clientes[str(customerID)]["demand"]
-            distance=distances[customerID][lastCustomerID]#
-            service_time=clientes[str(customerID)]["service_time"]#Tiempo que demora el vehiculo desde que llega donde el cliente hasta que continua el viaje
-            returnTime = distances[customerID][0]
+#             vehicleLoadActualizada=demanda+vehicleLoad
 
-            vehicleLoadActualizada=demanda+vehicleLoad            
-            updatedElapsedTime = elapsedTime+distance+service_time+returnTime #tiempo transcurrido hasta el momento mas el tiempo que demora en llegar al cliente actual(distancia=tiempo)
-            hora_retiro=updatedElapsedTime - returnTime
             
-            if (vehicleLoadActualizada <= capacidadvehiculo ) and (updatedElapsedTime <= retorno_debido) and (hora_retiro<= hora_max_recogida ) and ( hora_retiro >= hora_min_recogida ):
-                subRoute.append(customerID)
-                vehicleLoad=vehicleLoadActualizada
-                elapsedTime = updatedElapsedTime - returnTime
-            else:
-                elapsedTime = distances[0][customerID] + service_time #cambiar por distancia desde vehiculo hasta customer id
-                route.append(subRoute)
-                subRoute=[customerID]
-                vehicleLoad=demanda
-            lastCustomerID=customerID
+#             if (vehicleLoadActualizada <= capacidadvehiculo):
+#                 subRoute.append(customerID)
+#                 vehicleLoad=vehicleLoadActualizada
+#             else:
 
-        if subRoute != []:
-            route.append(subRoute)
+#                 route.append(subRoute)
+#                 subRoute= [customerID]
+#                 vehicleLoad=demanda
+#             lastCustomerID=customerID
+
+#         if subRoute != []:
+#             route.append(subRoute)
         
-        return route
+#         return route
     
 def crossover(ind1, ind2):
     #print("individuo 1",ind1)
@@ -169,15 +152,24 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
    
     def initial_population(Problem_Genetic,size): #se crean los cromosomas aleatoriamente, luego se crea una poblacion inicial de cromosomas de acuerdo al tamaño elegido( size)
         population=[]
-        individue=Problem_Genetic.idclientes
+        
+
+        def create_individue(Problem_Genetic):
+            individue=[]
+            for i in range(len(Problem_Genetic.idclientes)):
+                vehicle=random.sample(Problem_Genetic.idvehicles,1)[0]
+                individue.append(vehicle)
+            return individue
+                
+        
 
         for i in range(size):
             
-            random.shuffle(individue)
+            individue=create_individue(Problem_Genetic)
             aux=copy.deepcopy(individue)            
             population.append(aux)
                 
-
+          
         return population
 
             
@@ -190,7 +182,7 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
             # Note: below is for illustration. It can be replaced by 
             # heapq.nlargest( bigArray, k )
             heapq.heapify(population)
-            heap=heapq.nsmallest(n, population,key= lambda x: fitness(x,Problem_Genetic,vehicles))
+            heap=heapq.nsmallest(n, population,key= lambda x: fitness(x,Problem_Genetic))
 
     
             return heap
@@ -205,8 +197,8 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
                 padre1=elements[0]
                 padre2=elements[1]
                 
-                fitness1=fitness(padre1,Problem_Genetic,vehicles)
-                fitness2=fitness(padre2,Problem_Genetic,vehicles)    
+                fitness1=fitness(padre1,Problem_Genetic)
+                fitness2=fitness(padre2,Problem_Genetic)    
 
                 if(fitness1<fitness2):
                     winners.append(padre1)                  
@@ -250,7 +242,7 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
         best=population[0]
         
         for i in population:
-            if(fitness(i,Problem_Genetic,vehicles)< fitness(best,Problem_Genetic,vehicles)):
+            if(fitness(i,Problem_Genetic)< fitness(best,Problem_Genetic)):
                 
                 best=i
         
@@ -265,11 +257,11 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
     #   print("cromosoma y funcion",i,fitness(i,Problem_Genetic))
     #print(bestChromosome)
 
-    finalRoute=generateRoute(bestChromosome,Problem_Genetic,vehicles)
+    finalRoute=generateRoute(bestChromosome,Problem_Genetic)
     for i,r in enumerate(finalRoute):
         print("Ruta ",i,":",r)
 
-    print("fitness=",fitness(bestChromosome,Problem_Genetic,vehicles))
+    print("fitness=",fitness(bestChromosome,Problem_Genetic))
 
 
     return (bestChromosome,fitness(bestChromosome,Problem_Genetic))
@@ -304,23 +296,21 @@ if __name__ == "__main__":
 
     
 
-    idvehicles=order_vehicles_distances(idvehicles)
     print(idvehicles)
+        
+
 
     
-    #for i in vehicles.keys():
-     #   idvehicles.append(int(i))  
-    #tiempo_inicial= time() 
-    #Para optimizar el tiempo de computo, modificamos la matriz con distancia 0 a cada uno de los vehiculos
-   # for i in idvehicles:
-   #     distances[demands_position[str(i)]["position"]][0]=0
     #distances = {0:w0,1:w1,2:w2,3:w3,4:w4,5:w5,6:w6,7:w7,8:w8}
 
-    instance=Problem_Genetic(clientes,idclientes,capacidadvehiculo,cantidadvehiculo,idvehicles)
+    instance=Problem_Genetic(clientes,idclientes,capacidadvehiculo,idvehicles)
     #def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#k participantes en el torneo
-    genetic_algorithm(instance,2,min,2000,500,0.85,0.05)
+    genetic_algorithm(instance,2,min,2500,800,0.85,0.05) #4200/800 max por ahora con promedio de 835
+
     tiempo_final = time() 
     print("tiempo de ejecución",tiempo_final-tiempo_inicial)
+
+
 
    
 
