@@ -49,7 +49,7 @@ class Problem_Genetic:#clase que modela el problema: Recibe los clientes, la cap
         self.cantidadvehiculo=cantidadvehiculo
         self.clientes=clientes
         self.idclientes=idclientes
-        self.vehicles=idvehicles
+        self.idvehicles=idvehicles
 
     
     def mutation(self,idclientes):    
@@ -110,9 +110,9 @@ def generateRoute(individue,Problem_Genetic,vehicles): #Genero sub rutas las cua
 
 
         for customerID in individue:
-            retorno_customer=clientes[str(customerID)["position"]]["hora_vuelo"] 
-            hora_max_recogida=clientes[str(customerID)["position"]]["hora_max_recogida"]
-            hora_min_recogida=clientes[str(customerID)["position"]]["hora_min_recogida"]  
+            retorno_customer=clientes[str(customerID)]["hora_vuelo"] 
+            hora_max_recogida=clientes[str(customerID)]["hora_max_recogida"]
+            hora_min_recogida=clientes[str(customerID)]["hora_min_recogida"]  
              #se debe setear la hora de vuelo del origen como infinita
             if(retorno_customer<retorno_debido):#La hora en que debe llegar el vehículo es la cota mínima de las restricciones de horarios de vuelo
                 retorno_debido=retorno_customer                     
