@@ -61,7 +61,7 @@ def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para 
         vehicles=copy.copy(Problem_Genetic.idvehicles)
         
 
-        
+
             
         
         
@@ -69,18 +69,19 @@ def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para 
             # print(subRoute)
             # print(Problem_Genetic.vehicles)
             # print(vehicles)
-            bestvehicle=min(vehicles,key=lambda x:distances[Problem_Genetic.vehicles[str(x)]["position"]][clientes[str(subRoute[0])]["position"]])  
-            # subRouteDistance=distances[Problem_Genetic.vehicles[str(bestvehicle)]["position"]][clientes[str(subRoute[0])]["position"]]
+            bestvehicle=min(vehicles,key=lambda x:distances[Problem_Genetic.vehicles[str(x)]["position"]][clientes[str(subRoute[0])]["position"]])#se añade el vehiculo mas cercano para la primera ruta  
             # print(bestvehicle)
             # for i in vehicles:
             #     print(distances[Problem_Genetic.vehicles[str(i)]["position"]][clientes[str(subRoute[0])]["position"]])
-            vehicles.pop(bestvehicle)   
+            vehicles.pop(bestvehicle)   #elimino de vehiculos disponibles el vehiculo escogido 
 
               
             # print("--------")         
             vehicle_use+=1
             lastCustomerID = 0
             subRouteDistance = 0
+            subRouteDistance=distances[Problem_Genetic.vehicles[str(bestvehicle)]["position"]][clientes[str(subRoute[0])]["position"]]
+
             #print("subruta",subRoute)
             for customerID in subRoute:
                 distance=distances[clientes[str(customerID)]["position"]][clientes[str(lastCustomerID)]["position"]]
@@ -89,7 +90,7 @@ def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para 
                 lastCustomerID=customerID
 
             #print("last cutomer id, 0",lastCustomerID,distances[lastCustomerID][0])    
-            routDistance+=subRouteDistance + distances[lastCustomerID][0]
+            routDistance+=subRouteDistance + distances[clientes[str(lastCustomerID)]["position"]][0]-distances[clientes[str(subRoute[0])]["position"]][0]#distancia de la ruta es la distancia total mas la distancia al deposito menos la distancia del primer cliente al deposito
             
     #
         #fitness=routDistance*vehicle_use*vehicle_use
