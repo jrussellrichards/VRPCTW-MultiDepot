@@ -69,18 +69,22 @@ def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para 
             # print(subRoute)
             # print(Problem_Genetic.vehicles)
             # print(vehicles)
+            if(vehicles==[]):   
+                break;
             bestvehicle=min(vehicles,key=lambda x:distances[Problem_Genetic.vehicles[str(x)]["position"]][clientes[str(subRoute[0])]["position"]])#se añade el vehiculo mas cercano para la primera ruta  
             # print(bestvehicle)
             # for i in vehicles:
             #     print(distances[Problem_Genetic.vehicles[str(i)]["position"]][clientes[str(subRoute[0])]["position"]])
-            vehicles.pop(bestvehicle)   #elimino de vehiculos disponibles el vehiculo escogido 
-
+            # print(vehicles,bestvehicle)
+            
+            vehicles.remove(bestvehicle)   #elimino de vehiculos disponibles el vehiculo escogido 
+            # print(vehicles)
               
             # print("--------")         
-            vehicle_use+=1
+            vehicle_use+=1 #por cada sub ruta se utiliza un vehiculo
             lastCustomerID = 0
             subRouteDistance = 0
-            subRouteDistance=distances[Problem_Genetic.vehicles[str(bestvehicle)]["position"]][clientes[str(subRoute[0])]["position"]]
+            subRouteDistance=distances[Problem_Genetic.vehicles[str(bestvehicle)]["position"]][clientes[str(subRoute[0])]["position"]] #la distancia inicial de la ruta es desde el vehiculo que se utilizara para ella hasta el primer cliente. 
 
             #print("subruta",subRoute)
             for customerID in subRoute:
@@ -267,9 +271,14 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
     #print(bestChromosome)
 
     finalRoute=generateRoute(bestChromosome,Problem_Genetic)
+    vehicles_aux=copy.copy(Problem_Genetic.idvehicles)
+
     for i,r in enumerate(finalRoute):
         print("Ruta ",i,":",r)
-
+    for i in finalRoute:
+        bestvehicle=min(vehicles_aux,key=lambda x:distances[Problem_Genetic.vehicles[str(x)]["position"]][clientes[str(i[0])]["position"]])
+        print("vehiculo",bestvehicle,":",i)
+        vehicles_aux.remove(bestvehicle)
     print("fitness=",fitness(bestChromosome,Problem_Genetic))
 
 

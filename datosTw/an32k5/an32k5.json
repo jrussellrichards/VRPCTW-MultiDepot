@@ -1,17 +1,15 @@
 {
 "vehicles":{
 
-"1":{"position":0},
-"2":{"position":0},
-"3":{"position":0},
-"4":{"position":0},
-"5":{"position":0},
+"1":{"position":1},
+"2":{"position":2},
+"3":{"position":3},
+"4":{"position":4},
+"5":{"position":5},
 "6":{"position":0},
 "7":{"position":0},
 "8":{"position":0},
 "9":{"position":0}
-
-
 },
 
 "customers":{
