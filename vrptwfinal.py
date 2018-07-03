@@ -62,7 +62,59 @@ def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para 
         
 
 
+        
+        
+        for subRoute in route:
+            # print(route)
+            # print(subRoute)
+            # print(Problem_Genetic.vehicles)
+            # print(vehicles)
+            if(vehicles==[]):   #Si no hay mas vehiculos para asignar
+                break;
+
+            bestvehicle=min(vehicles,key=lambda x:distances[Problem_Genetic.vehicles[str(x)]["position"]][clientes[str(subRoute[0])]["position"]])#se añade el vehiculo mas cercano para la primera ruta  
+            # print(bestvehicle)
+            # for i in vehicles:
+            #     print(distances[Problem_Genetic.vehicles[str(i)]["position"]][clientes[str(subRoute[0])]["position"]])
+            # print(vehicles,bestvehicle)ignar
             
+            vehicles.remove(bestvehicle)   #elimino de vehiculos disponibles el vehiculo escogido 
+            # print(vehicles)
+              
+            # print("--------")         
+            vehicle_use+=1 #por cada sub ruta se utiliza un vehiculo
+            lastCustomerID = 0
+            subRouteDistance = 0
+            subRouteDistance=distances[Problem_Genetic.vehicles[str(bestvehicle)]["position"]][clientes[str(subRoute[0])]["position"]] #la distancia inicial de la ruta es desde el vehiculo que se utilizara para ella hasta el primer cliente. 
+
+            #print("subruta",subRoute)
+            for customerID in subRoute:
+                distance=distances[clientes[str(customerID)]["position"]][clientes[str(lastCustomerID)]["position"]]
+                service_time=clientes[str(customerID)]["service_time"]
+                #print("customerID,lastCustomerID,distancia",customerID,lastCustomerID,distances[customerID][lastCustomerID])          
+                subRouteDistance=subRouteDistance+distance+service_time
+                lastCustomerID=customerID
+
+            #print("last cutomer id, 0",lastCustomerID,distances[lastCustomerID][0])    
+            routDistance+=subRouteDistance + distances[clientes[str(lastCustomerID)]["position"]][0]-distances[clientes[str(subRoute[0])]["position"]][0]#distancia de la ruta es la distancia total mas la distancia al deposito menos la distancia del primer cliente al deposito
+            
+    
+        #fitness=routDistance*vehicle_use*vehicle_use
+        fitness=routDistance
+        if(vehicle_use>Problem_Genetic.cantidadvehiculo ):
+            fitness=fitness*1000000000000000
+            
+                    
+        return fitness,vehicle_use
+
+def fitness_final(individue,Problem_Genetic): #Se calcula la evaluación fitness para cada ruta
+
+        route=generateRoute(individue,Problem_Genetic)
+        subRouteDistance=0
+        routDistance=0
+        capacity=0
+        vehicle_use=0
+        vehicles=copy.copy(Problem_Genetic.idvehicles)            
         
         
         for subRoute in route:
@@ -78,6 +130,7 @@ def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para 
             # print(vehicles,bestvehicle)
             
             vehicles.remove(bestvehicle)   #elimino de vehiculos disponibles el vehiculo escogido 
+            print("Vehículo para esta ruta:", bestvehicle)
             # print(vehicles)
               
             # print("--------")         
@@ -85,18 +138,22 @@ def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para 
             lastCustomerID = 0
             subRouteDistance = 0
             subRouteDistance=distances[Problem_Genetic.vehicles[str(bestvehicle)]["position"]][clientes[str(subRoute[0])]["position"]] #la distancia inicial de la ruta es desde el vehiculo que se utilizara para ella hasta el primer cliente. 
-
+            print("distancia vehiculo: ", bestvehicle, " con cliente",clientes[str(subRoute[0])]["position"],"=",subRouteDistance)
             #print("subruta",subRoute)
             for customerID in subRoute:
                 distance=distances[clientes[str(customerID)]["position"]][clientes[str(lastCustomerID)]["position"]]
+                service_time=clientes[str(customerID)]["service_time"]
+                print("tiempo de servicio para cliente ",customerID,":",service_time)
+                print("distancia entre ",lastCustomerID,"y ",customerID,"=",distance)
                 #print("customerID,lastCustomerID,distancia",customerID,lastCustomerID,distances[customerID][lastCustomerID])          
-                subRouteDistance=subRouteDistance+distance
+                subRouteDistance=subRouteDistance+distance+service_time
+                print("distancia de sub ruta hasta ahora:",subRouteDistance)
                 lastCustomerID=customerID
 
             #print("last cutomer id, 0",lastCustomerID,distances[lastCustomerID][0])    
             routDistance+=subRouteDistance + distances[clientes[str(lastCustomerID)]["position"]][0]-distances[clientes[str(subRoute[0])]["position"]][0]#distancia de la ruta es la distancia total mas la distancia al deposito menos la distancia del primer cliente al deposito
-            
-    #
+            print("Distancia de ruta",routDistance)
+    
         #fitness=routDistance*vehicle_use*vehicle_use
         fitness=routDistance
         if(vehicle_use>Problem_Genetic.cantidadvehiculo ):
@@ -111,32 +168,69 @@ def generateRoute(individue,Problem_Genetic): #Genero sub rutas las cuales repre
         capacidadvehiculo=Problem_Genetic.capacidadvehiculo
         vehicleLoad=0
         lastCustomerID=0
-        elapsedTime=0
+        elapsedTime=0   
         retorno_debido=10000
+        vehicles=copy.copy(Problem_Genetic.idvehicles)  
+        # print("individue",individue)
+        bestvehicle=min(vehicles,key=lambda x:distances[Problem_Genetic.vehicles[str(x)]["position"]][clientes[str(individue[0])]["position"]])#se añade el vehiculo mas cercano para la primera ruta  
+        distance_init=distances[Problem_Genetic.vehicles[str(bestvehicle)]["position"]][clientes[str(individue[0])]["position"]]
+        vehicles.remove(bestvehicle) 
 
+        # print("bestvehicle",bestvehicle)
+        # print("distance bestvehicle and client",individue[0],":",distance_init)
         for customerID in individue:
             retorno_customer=clientes[str(customerID)]["hora_vuelo"] 
+            # print("retorno_customer",retorno_customer)
             hora_max_recogida=clientes[str(customerID)]["hora_max_recogida"]
-            hora_min_recogida=clientes[str(customerID)]["hora_min_recogida"]
+            # print("hora max recogida",hora_max_recogida)
+            # hora_min_recogida=clientes[str(customerID)]["hora_min_recogida"]
+            # print("hora min recogida",hora_min_recogida)
              #se debe setear la hora de vuelo del origen como infinita
             if(retorno_customer<retorno_debido):#La hora en que debe llegar el vehículo es la cota mínima de las restricciones de horarios de vuelo
                 retorno_debido=retorno_customer                     
-
+            # print("retorno debido",retorno_debido)    
             demanda=Problem_Genetic.clientes[str(customerID)]["demand"]
-            distance=distances[customerID][lastCustomerID]#
+            # print("demanda",demanda)
+            distance=distances[customerID][lastCustomerID]+distance_init
+            if(lastCustomerID==0):
+                distance=distance-distances[customerID][lastCustomerID]
+
+            # print("distance_total",distance)
+            distance_init=0
             service_time=clientes[str(customerID)]["service_time"]#Tiempo que demora el vehiculo desde que llega donde el cliente hasta que continua el viaje
-            returnTime = distances[customerID][0]
+            # print("service_time",service_time)
+            returnTime = distances[clientes[str(customerID)]["position"]][clientes[str(0)]["position"]]
+            # print("returnTime",returnTime)
 
             vehicleLoadActualizada=demanda+vehicleLoad            
             updatedElapsedTime = elapsedTime+distance+service_time+returnTime #tiempo transcurrido hasta el momento mas el tiempo que demora en llegar al cliente actual(distancia=tiempo)
+            # print("updatedElapsedTime",updatedElapsedTime)
             hora_retiro=updatedElapsedTime - returnTime
+            # print("hora_retiro",hora_retiro)
             
-            if (vehicleLoadActualizada <= capacidadvehiculo ) and (updatedElapsedTime <= retorno_debido) and (hora_retiro<= hora_max_recogida ) and ( hora_retiro >= hora_min_recogida ):
+            if ((vehicleLoadActualizada <= capacidadvehiculo ) and (updatedElapsedTime <= retorno_debido) 
+            and (hora_retiro<= hora_max_recogida ) ):
+                # print("se permite agregar porque su carga es mejor a la capacidad (",vehicleLoadActualizada,"<",capacidadvehiculo,
+                #     "el tiempo actual es mejor que el tiempo de retorno debido(",updatedElapsedTime,"<",retorno_debido,"y hora retiro",
+                #     "es mejor que hora maxima posible (",hora_retiro,"<",hora_max_recogida,"y hora retiro mayor que hora min(",hora_retiro,
+                #     ">",hora_min_recogida)
                 subRoute.append(customerID)
                 vehicleLoad=vehicleLoadActualizada
+                # print("vehicleLoad",vehicleLoad)
                 elapsedTime = updatedElapsedTime - returnTime
+                # print("elapsedTime",elapsedTime)
             else:
-                elapsedTime = distances[0][customerID] + service_time #cambiar por distancia desde vehiculo hasta customer id
+                if(vehicles==[]):   
+                    break;                
+                # print(" No se permite agregar porque su carga no es mejor a la capacidad (",vehicleLoadActualizada,"<",capacidadvehiculo,
+                #     "el tiempo actual no es menor que el tiempo de retorno debido(",updatedElapsedTime,"<",retorno_debido,"y hora retiro",
+                #     "no es menor que hora maxima posible (",hora_retiro,"<",hora_max_recogida,"y hora retiro no mayor que hora min(",hora_retiro,
+                #     ">",hora_min_recogida)    
+                bestvehicle=copy.copy(min(vehicles,key=lambda x:distances[Problem_Genetic.vehicles[str(x)]["position"]][clientes[str(individue[0])]["position"]]))
+                # print("bestvehicle",bestvehicle)
+                vehicles.remove(bestvehicle) 
+                elapsedTime = distances[Problem_Genetic.vehicles[str(bestvehicle)]["position"]][clientes[str(customerID)]["position"]] + service_time #cambiar por distancia desde vehiculo hasta customer id
+                # print("elapsedTime",elapsedTime)
                 route.append(subRoute)
                 subRoute=[customerID]
                 vehicleLoad=demanda
@@ -273,13 +367,17 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
     finalRoute=generateRoute(bestChromosome,Problem_Genetic)
     vehicles_aux=copy.copy(Problem_Genetic.idvehicles)
 
-    for i,r in enumerate(finalRoute):
-        print("Ruta ",i,":",r)
+    # for i,r in enumerate(finalRoute):
+    #     print("Ruta ",i,":",r)
     for i in finalRoute:
         bestvehicle=min(vehicles_aux,key=lambda x:distances[Problem_Genetic.vehicles[str(x)]["position"]][clientes[str(i[0])]["position"]])
         print("vehiculo",bestvehicle,":",i)
         vehicles_aux.remove(bestvehicle)
     print("fitness=",fitness(bestChromosome,Problem_Genetic))
+
+    fitness_final(bestChromosome,Problem_Genetic)
+
+        
 
 
     return (bestChromosome,fitness(bestChromosome,Problem_Genetic))
@@ -290,7 +388,7 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
 if __name__ == "__main__":
 
     tiempo_inicial = time()
-    problem = json.loads(open('datosTw/an32k5/an32k5.json').read())
+    problem = json.loads(open('datosVrpFinal/an32k5/an32k5.json').read())
     vehicles=problem["vehicles"]
     clientes=problem["customers"]
     dict_idclientes=clientes.keys()
@@ -316,7 +414,7 @@ if __name__ == "__main__":
 
     instance=Problem_Genetic(clientes,idclientes,capacidadvehiculo,cantidadvehiculo,idvehicles,vehicles)
     #def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#k participantes en el torneo
-    genetic_algorithm(instance,2,min,2500,50,0.85,0.05)
+    genetic_algorithm(instance,2,min,100,50,0.85,0.05)
 
     tiempo_final = time() 
     print("tiempo de ejecución",tiempo_final-tiempo_inicial)

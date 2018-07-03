@@ -258,7 +258,7 @@ if __name__ == "__main__":
     cantidadvehiculo=problem["max_vehicle_number"]
     capacidadvehiculo=problem["vehicle_capacity"] 
     print(cantidadvehiculo,capacidadvehiculo)
-    print(idclientes)
+    # print(idclientes)
   
     tiempo_inicial= time() 
         
@@ -269,7 +269,7 @@ if __name__ == "__main__":
 
     instance=Problem_Genetic(demands_position,idclientes,capacidadvehiculo,cantidadvehiculo)
     #def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#k participantes en el torneo
-    genetic_algorithm(instance,2,min,1000,500,0.85,0.05) #4200/800 max por ahora con promedio de 835
+    genetic_algorithm(instance,2,min,2500,800,0.85,0.05) #4200/800 max por ahora con promedio de 835
 
     tiempo_final = time() 
     print("tiempo de ejecución",tiempo_final-tiempo_inicial)
