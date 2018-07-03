@@ -59,10 +59,11 @@ def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para 
         capacity=0
         vehicle_use=0
         vehicles=copy.copy(Problem_Genetic.idvehicles)
+        infactible=0
         
 
 
-        
+        print(route)
         
         for subRoute in route:
             # print(route)
@@ -89,10 +90,21 @@ def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para 
 
             #print("subruta",subRoute)
             for customerID in subRoute:
+                hora_min_recogida=clientes[str(customerID)]["hora_min_recogida"]
                 distance=distances[clientes[str(customerID)]["position"]][clientes[str(lastCustomerID)]["position"]]
                 service_time=clientes[str(customerID)]["service_time"]
+                print("customer id",customerID)
+                print("hora_min_recogida",hora_min_recogida)
+           
+                
                 #print("customerID,lastCustomerID,distancia",customerID,lastCustomerID,distances[customerID][lastCustomerID])          
-                subRouteDistance=subRouteDistance+distance+service_time
+                subRouteDistance=subRouteDistance+distance
+                print("subruta",subRouteDistance)
+                if(hora_min_recogida>subRouteDistance):
+                    infactible=1
+                    print("infactible")
+                    print("")
+                subRouteDistance=subRouteDistance+service_time
                 lastCustomerID=customerID
 
             #print("last cutomer id, 0",lastCustomerID,distances[lastCustomerID][0])    
@@ -101,7 +113,7 @@ def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para 
     
         #fitness=routDistance*vehicle_use*vehicle_use
         fitness=routDistance
-        if(vehicle_use>Problem_Genetic.cantidadvehiculo ):
+        if(vehicle_use>Problem_Genetic.cantidadvehiculo or infactible==1 ):
             fitness=fitness*1000000000000000
             
                     
