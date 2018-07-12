@@ -8,7 +8,6 @@ import heapq
 
 
 
-
 clear = lambda: os.system('cls')
 igen=0
 
@@ -63,7 +62,7 @@ def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para 
         
 
 
-        print(route)
+        # print(route)
         
         for subRoute in route:
             # print(route)
@@ -93,17 +92,17 @@ def fitness(individue,Problem_Genetic): #Se calcula la evaluación fitness para 
                 hora_min_recogida=clientes[str(customerID)]["hora_min_recogida"]
                 distance=distances[clientes[str(customerID)]["position"]][clientes[str(lastCustomerID)]["position"]]
                 service_time=clientes[str(customerID)]["service_time"]
-                print("customer id",customerID)
-                print("hora_min_recogida",hora_min_recogida)
+                # print("customer id",customerID)
+                # print("hora_min_recogida",hora_min_recogida)
            
                 
                 #print("customerID,lastCustomerID,distancia",customerID,lastCustomerID,distances[customerID][lastCustomerID])          
                 subRouteDistance=subRouteDistance+distance
-                print("subruta",subRouteDistance)
+                # print("subruta",subRouteDistance)
                 if(hora_min_recogida>subRouteDistance):
                     infactible=1
-                    print("infactible")
-                    print("")
+                    # print("infactible")
+                    # print("")
                 subRouteDistance=subRouteDistance+service_time
                 lastCustomerID=customerID
 
@@ -387,7 +386,7 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
         vehicles_aux.remove(bestvehicle)
     print("fitness=",fitness(bestChromosome,Problem_Genetic))
 
-    fitness_final(bestChromosome,Problem_Genetic)
+    # fitness_final(bestChromosome,Problem_Genetic)
 
         
 
@@ -400,7 +399,7 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
 if __name__ == "__main__":
 
     tiempo_inicial = time()
-    problem = json.loads(open('datosVrpFinal/an32k5/an32k5.json').read())
+    problem = json.loads(open('datosVrpFinal/an80k10/an80k10.json').read())
     vehicles=problem["vehicles"]
     clientes=problem["customers"]
     dict_idclientes=clientes.keys()
@@ -426,7 +425,7 @@ if __name__ == "__main__":
 
     instance=Problem_Genetic(clientes,idclientes,capacidadvehiculo,cantidadvehiculo,idvehicles,vehicles)
     #def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#k participantes en el torneo
-    genetic_algorithm(instance,2,min,100,50,0.85,0.05)
+    genetic_algorithm(instance,2,min,500,2500,0.85,0.05)
 
     tiempo_final = time() 
     print("tiempo de ejecución",tiempo_final-tiempo_inicial)

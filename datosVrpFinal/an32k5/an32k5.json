@@ -13,10 +13,10 @@
 },
 
 "customers":{
-"0":{"position":0,"service_time":0,"hora_vuelo": 99999,"demand":0,"hora_max_recogida": 999999,"hora_min_recogida": 0 },
-"1":{"position":1,"service_time":0,"hora_vuelo":400,"demand":19,"hora_max_recogida": 50,"hora_min_recogida": 0},
-"2":{"position":2,"service_time":0,"hora_vuelo":5000,"demand":21,"hora_max_recogida": 5000,"hora_min_recogida": 0},
-"3":{"position":3,"service_time":0,"hora_vuelo":5000,"demand":6,"hora_max_recogida": 5000,"hora_min_recogida": 0},
+"0":{"position":0,"service_time":10,"hora_vuelo": 99999,"demand":0,"hora_max_recogida": 999999,"hora_min_recogida": 0 },
+"1":{"position":1,"service_time":5,"hora_vuelo":400,"demand":19,"hora_max_recogida": 50,"hora_min_recogida": 0},
+"2":{"position":2,"service_time":4,"hora_vuelo":5000,"demand":21,"hora_max_recogida": 5000,"hora_min_recogida": 0},
+"3":{"position":3,"service_time":30,"hora_vuelo":5000,"demand":6,"hora_max_recogida": 5000,"hora_min_recogida": 0},
 "4":{"position":4,"service_time":0,"hora_vuelo":5000,"demand":19,"hora_max_recogida": 5000,"hora_min_recogida": 0},
 "5":{"position":5,"service_time":0,"hora_vuelo":5000,"demand":7,"hora_max_recogida": 5000,"hora_min_recogida": 0},
 "6":{"position":6,"service_time":0,"hora_vuelo":5000,"demand":12,"hora_max_recogida": 5000,"hora_min_recogida": 0},

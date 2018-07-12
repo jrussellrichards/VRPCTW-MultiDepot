@@ -127,9 +127,9 @@ def get_minimum(k, a):  # calcula camino mínimo entre el nodo k y el set de nod
 	all_min = []
 
 	for j in a:  # j es el valor de cada cliente y a es el valor de cada sub ruta
-		print("j,a",j,a)
+		print("j,a",j,a)	
 		comunaJ = j.destino
-		comunaK = a.destino
+		comunaK = k.destino
 
 		set_a = copy.deepcopy(list(a))
 
