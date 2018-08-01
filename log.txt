@@ -1,0 +1,26 @@
+La matriz de distancia es:
+[0, 111, 9, 10]
+[0, 0, 6, 4]
+[0, 7, 0, 8]
+[0, 3, 12, 0]
+Por otro lado la matriz de adyacencia es:
+[1, 1, 1, 1]
+[1, 1, 1, 1]
+[1, 1, 1, 1]
+[1, 1, 1, 1]
+
+Nuevo cliente, su id es: 2 y el destino:2
+se agrego el cliente al vehiculo80
+
+Nuevo cliente, su id es: 3 y el destino:3
+probando con el  vehiculo 80 obtenemos que la mejor ruta es: [1, 3, 2] y aquella ruta tiene una distancia de: 16
+se agrego el cliente al vehiculo 80 ya que es la distancia más corta
+
+Nuevo cliente, su id es: 4 y el destino:4
+probando con el  vehiculo 80 obtenemos que la mejor ruta es: [1, 4, 2, 3] y aquella ruta tiene una distancia de: 19
+se agrego el cliente al vehiculo 80 ya que es la distancia más corta
+
+Nuevo cliente, su id es: 5 y el destino:2
+probando con el  vehiculo 80 obtenemos que la mejor ruta es: [1, 4, 2, 5, 3] y aquella ruta tiene una distancia de: 19
+se agrego el cliente al vehiculo 80 ya que es la distancia más corta
+los vehiculos que quedan son: {0: 80} compuestos de la siguiente manera: [[4, 2, 5, 3]]

@@ -9,3 +9,4 @@ Route #8: 42 53 66 67 36 73 49
 Route #9: 52 28 79 18 48 14 71 
 Route #10: 58 32 4 22 45 50 76 70 
 cost 1763
+cost origin(vehicles in position): 1245

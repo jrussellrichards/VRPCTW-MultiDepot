@@ -45,7 +45,7 @@ class vehicle:
 
 def tsp(vehicle): #el algoritmo tsp recibe una ruta en forma de tupla
 #   print("calculando para el vehiculo",vehicle)
-	
+	print("vehicle",vehicle)
 	finalSolution=[] #para guardar la solucion final
 	for x in vehicle: 
 
@@ -229,7 +229,9 @@ if __name__ == '__main__':
 			
 
 			if(i==[]):
+				# tsp(tuple(i))
 				i.append(idd)
+				# tsp(tuple(i))
 				archivo_log.write("se agrego el cliente al vehiculo"+str(deposito[0])+'\n')
 				print("agregado el cliente",idd, "al vehículo",pos+1)
 				#print(vehicles)
@@ -247,10 +249,10 @@ if __name__ == '__main__':
 
 
 	for i,v in enumerate(vehicles):
-
+		print("vehicles",vehicles)
 
 		if(v!=[]):
-
+			print("v",v)
 			ruta=tsp(tuple(v))
 			g = {}
 			p = [] 

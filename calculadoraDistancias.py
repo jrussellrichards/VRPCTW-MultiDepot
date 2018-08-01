@@ -11,23 +11,24 @@ import heapq
 if __name__ == "__main__":
 
     tiempo_inicial = time()
-    problem = json.loads(open('datosVrpFinal/an32k5/an32k5.json').read())
+    problem = json.loads(open('datosVrpFinal/an80k10/an80k10.json').read())
     vehicles=problem["vehicles"]
     clientes=problem["customers"]
     dict_idclientes=clientes.keys()
     distances= problem["distance_matrix"]
     cantidadvehiculo=problem["max_vehicle_number"]
     capacidadvehiculo=problem["vehicle_capacity"] 
-    print(cantidadvehiculo,capacidadvehiculo)
+    suma=0
+    while(1):
 
-    print("ingrese cliente 1:")
-    cliente1= int(input()) 
-    print("ingrese cliente 2:")      
-    cliente2= int(input()) 
-    distance=distances[clientes[str(cliente1)]["position"]][clientes[str(cliente2)]["position"]]
-    print(distance)
-
-    
+        print("ingrese cliente 1:")
+        cliente1= int(input()) 
+        print("ingrese cliente 2:")      
+        cliente2= int(input()) 
+        distance=distances[clientes[str(cliente1)]["position"]][clientes[str(cliente2)]["position"]]
+        print(distance)
+        suma=suma+distance
+        print("suma total:",suma)
 
 
 

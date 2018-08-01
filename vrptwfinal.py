@@ -385,6 +385,9 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
         print("vehiculo",bestvehicle,":",i)
         vehicles_aux.remove(bestvehicle)
     print("fitness=",fitness(bestChromosome,Problem_Genetic))
+    # rpd=((fitness(bestChromosome,Problem_Genetic)-optimo)/optimo)*100
+    # print("rpd:",rpd)
+
 
     # fitness_final(bestChromosome,Problem_Genetic)
 
@@ -399,13 +402,14 @@ def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#
 if __name__ == "__main__":
 
     tiempo_inicial = time()
-    problem = json.loads(open('datosVrpFinal/an80k10/an80k10.json').read())
+    problem = json.loads(open('datosVrpFinal/reales/reales.json').read())
     vehicles=problem["vehicles"]
     clientes=problem["customers"]
     dict_idclientes=clientes.keys()
     distances= problem["distance_matrix"]
     cantidadvehiculo=problem["max_vehicle_number"]
     capacidadvehiculo=problem["vehicle_capacity"] 
+    optimo=1250
     print(cantidadvehiculo,capacidadvehiculo)
     
 
@@ -425,10 +429,11 @@ if __name__ == "__main__":
 
     instance=Problem_Genetic(clientes,idclientes,capacidadvehiculo,cantidadvehiculo,idvehicles,vehicles)
     #def genetic_algorithm(Problem_Genetic,k,opt,ngen,size,ratio_cross,prob_mutate):#k participantes en el torneo
-    genetic_algorithm(instance,2,min,500,2500,0.85,0.05)
+    genetic_algorithm(instance,2,min,1700,600,0.85,0.05)
 
     tiempo_final = time() 
     print("tiempo de ejecución",tiempo_final-tiempo_inicial)
+
 
    
 
